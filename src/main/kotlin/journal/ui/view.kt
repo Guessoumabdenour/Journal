@@ -137,7 +137,7 @@ fun App(viewModel: MyJournalState = MyJournalState()) {
                                         style = TextStyle(
                                             fontSize = 24.sp,
                                             color = White,
-                                            fontWeight = FontWeight.Normal
+                                            fontWeight = FontWeight.Bold
                                         ),
                                         maxLines = 1,
                                         overflow = TextOverflow.Ellipsis
@@ -154,7 +154,7 @@ fun App(viewModel: MyJournalState = MyJournalState()) {
                                 text = "Aujourd'hui",
                                 style = MaterialTheme.typography.headlineSmall.copy(
                                     color = White,
-                                    fontWeight = FontWeight.SemiBold
+                                    fontWeight = FontWeight.Bold
                                 ),
                                 modifier = Modifier.padding(start = 12.dp)
                             )
