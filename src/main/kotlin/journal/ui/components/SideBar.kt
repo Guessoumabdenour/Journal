@@ -27,7 +27,37 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
 import compose.icons.fontawesomeicons.regular.CalendarCheck
+import journal.model.MyJournalState
 import journal.model.Note
+
+import java.text.SimpleDateFormat
+import java.util.*
+
+@Composable
+fun calculateCounts(notes: List<Note>): Triple<Int, Int, Int> {
+    val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+
+    // Entries This Year
+    val entriesThisYear = notes.count {
+        val noteDate = SimpleDateFormat("EEEE d MMMM", Locale.FRENCH).parse(it.dateCreated)
+        val noteYear = Calendar.getInstance().apply { time = noteDate }.get(Calendar.YEAR)
+        noteYear == currentYear
+    }
+
+    // Words Written
+    val wordsWritten = notes.sumOf { note ->
+        note.body.split("\\s+".toRegex()).size // Split by spaces and count words
+    }
+
+    // Writing Days
+    val distinctWritingDays = notes.map { note ->
+        val noteDate = SimpleDateFormat("EEEE d MMMM", Locale.FRENCH).parse(note.dateCreated)
+        SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(noteDate) // Format to yyyy-MM-dd to ignore time
+    }.toSet().size
+
+    return Triple(entriesThisYear, wordsWritten, distinctWritingDays)
+}
+
 
 
 val DarkerGray = Color(0xFF1C1C1C)
@@ -43,7 +73,11 @@ val SublabelColorDefault = Color(0xFFAAAAAA)
 fun SideBar(
     modifier: Modifier = Modifier.clip(RoundedCornerShape(20.dp)),
     notes: List<Note>,
+    myJournalState: MyJournalState
+
 ) {
+    val (entriesThisYear, wordsWritten, writingDays) = calculateCounts(myJournalState.notes)
+
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(10.dp))
@@ -68,9 +102,10 @@ fun SideBar(
                 modifier = Modifier.padding(top = 0.dp, bottom = 12.dp)
             )
 
+            // Dynamically pass the count values
             CustomBox(
                 icon = FontAwesomeIcons.Regular.CalendarCheck,
-                label = "1",
+                label = entriesThisYear.toString(),
                 sublabel = "entrée cette année",
                 iconColor = Color(0xFF5E5BE6),
             )
@@ -79,7 +114,7 @@ fun SideBar(
 
             CustomBox(
                 icon = FontAwesomeIcons.Solid.QuoteLeft,
-                label = "11",
+                label = wordsWritten.toString(),
                 sublabel = "Mots écrits",
                 iconColor = Color(0xFFC36D73),
             )
@@ -88,7 +123,7 @@ fun SideBar(
 
             CustomBox(
                 icon = FontAwesomeIcons.Regular.CalendarAlt,
-                label = "1",
+                label = writingDays.toString(),
                 sublabel = "jour d'écriture",
                 iconColor = Color(0xFF7209b7),
             )
@@ -195,7 +230,7 @@ fun SettingsItem(
                 color = SublabelColorDefault
             )
         )
-        Spacer(modifier = Modifier.width(16.dp)) // Espacement entre l'icône et le texte
+        Spacer(modifier = Modifier.width(16.dp))
     }
 }
 

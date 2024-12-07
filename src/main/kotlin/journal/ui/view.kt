@@ -35,7 +35,6 @@ val White = Color(0xFFFFFFFF)
 val LightPurple = Color(0xFF301E34)
 val DarkPurple = Color(0xFF080812)
 val MainPurple = Color(0xFF5E5BE6)
-val DarkerGray = Color(0xFF1C1C1C)
 
 @Preview
 @Composable
@@ -90,7 +89,8 @@ fun App(viewModel: MyJournalState = MyJournalState()) {
                         notes = sortedNotes,  // Passing the sorted notes list
                         modifier = Modifier
                             .clip(RoundedCornerShape(10.dp))
-                            .padding(8.dp)
+                            .padding(8.dp),
+                        myJournalState = MyJournalState()
                     )
 
                     Column(
