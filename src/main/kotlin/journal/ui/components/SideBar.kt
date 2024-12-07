@@ -20,6 +20,8 @@ import compose.icons.fontawesomeicons.Solid
 import compose.icons.fontawesomeicons.regular.CalendarAlt
 import compose.icons.fontawesomeicons.solid.QuoteLeft
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.graphics.vector.ImageVector
 import compose.icons.fontawesomeicons.regular.CalendarCheck
 import journal.model.Note
@@ -35,7 +37,7 @@ val SublabelColorDefault = Color(0xFFAAAAAA)
 @Composable
 fun SideBar(
     modifier: Modifier = Modifier.clip(RoundedCornerShape(20.dp)),
-    notes: List<Note>, // Accept notes as a parameter
+    notes: List<Note>,
 ) {
     Box(
         modifier = modifier
@@ -171,8 +173,8 @@ fun SettingsItem(
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun NotesList(notes: List<Note>) {
-    Column {
-        notes.forEach { note ->
+    LazyColumn {
+        items(notes) { note ->
             var isVisible by remember { mutableStateOf(false) }
 
             LaunchedEffect(note.id) {
@@ -184,19 +186,25 @@ fun NotesList(notes: List<Note>) {
                 enter = fadeIn(animationSpec = tween(durationMillis = 500)),
                 exit = fadeOut(animationSpec = tween(durationMillis = 500))
             ) {
-                Text(
-                    text = note.title.ifBlank { "Pas de titre" },
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        color = Color.White
-                    ),
-                    modifier = Modifier
-                        .padding(vertical = 4.dp)
-                        .animateEnterExit(
-                            enter = fadeIn(),
-                            exit = fadeOut()
-                        )
-                )
+                NoteItem(note = note)
             }
         }
     }
 }
+
+@Composable
+fun NoteItem(note: Note) {
+    Text(
+        text = note.title.ifBlank { "Pas de titre" },
+        style = MaterialTheme.typography.bodyMedium.copy(
+            color = Color.White
+        ),
+        modifier = Modifier
+            .padding(vertical = 4.dp)
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(8.dp))
+            .background(ElevatedDarkGray)
+            .padding(12.dp)
+    )
+}
+
