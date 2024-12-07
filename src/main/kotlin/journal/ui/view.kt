@@ -1,31 +1,59 @@
 package journal.ui
 
+import MainGrid
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.*
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.background
-import androidx.compose.foundation.focusable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.key.*
+import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Popup
+import compose.icons.FeatherIcons
+import compose.icons.FontAwesomeIcons
+import compose.icons.feathericons.CloudOff
+import compose.icons.feathericons.Edit
+import compose.icons.feathericons.MoreHorizontal
+import compose.icons.feathericons.Trash2
+import compose.icons.fontawesomeicons.Regular
+import compose.icons.fontawesomeicons.Solid
+import compose.icons.fontawesomeicons.regular.Bookmark
+import compose.icons.fontawesomeicons.solid.Bookmark
 import journal.model.MyJournalState
 import journal.model.MyJournalState.Companion.getCurrentDate
+import journal.model.Note
 import myjournal.view.components.DarkerGray
+import myjournal.view.components.ElevatedDarkGray
+import myjournal.view.components.IconColorDefault
 import myjournal.view.components.LeftNavigationBar
-import journal.ui.components.MainGrid
 
 import java.util.*
 
@@ -74,6 +102,7 @@ fun App(viewModel: MyJournalState = MyJournalState()) {
                 Row(
                     modifier = Modifier.weight(1f)
                 ) {
+
                     LeftNavigationBar(
                         modifier = Modifier.clip(RoundedCornerShape(10.dp)).padding(8.dp)
                     )
@@ -170,7 +199,7 @@ fun App(viewModel: MyJournalState = MyJournalState()) {
                                 contentPadding = PaddingValues(0.dp) // Remove padding inside the button
                             ) {
                                 Icon(
-                                    imageVector = Icons.Filled.Add,
+                                    imageVector = FeatherIcons.MoreHorizontal,
                                     contentDescription = "Add",
                                     modifier = Modifier.size(24.dp),
                                     tint = White
@@ -213,7 +242,7 @@ fun AddNoteForm(
             label = { Text("Titre") },
             modifier = Modifier.fillMaxWidth().background(Color(0xFF2F2F2F), RoundedCornerShape(5.dp)),
             colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = Color.Transparent,
+                //backgroundColor = Color.Transparent,
                 textColor = White,
                 cursorColor = MainPurple,
                 focusedIndicatorColor = MainPurple,
@@ -229,7 +258,7 @@ fun AddNoteForm(
 
                 .height(600.dp).background(Color(0xFF2F2F2F), RoundedCornerShape(5.dp)),
             colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = Color.Transparent,
+                //backgroundColor = Color.Transparent,
                 textColor = White,
                 cursorColor = MainPurple,
                 focusedIndicatorColor = MainPurple,
@@ -246,13 +275,21 @@ fun AddNoteForm(
             }
             Spacer(modifier = Modifier.width(8.dp))
             Button(
-                onClick = onSave, colors = ButtonDefaults.buttonColors(backgroundColor = MainPurple)
+                onClick = onSave, colors = ButtonDefaults.buttonColors(MainPurple)
             ) {
                 Text("Enregistrer", color = White)
             }
         }
     }
 }
+
+
+
+
+
+
+
+
 
 
 

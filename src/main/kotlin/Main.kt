@@ -16,7 +16,7 @@ fun main() = application {
         placement = WindowPlacement.Maximized
     )
 
-    val imageBitmap = loadImageBitmap(File("src/jvmMain/resources/icons/logo.png").inputStream())
+    val imageBitmap = loadImageBitmap(File("src/main/resources/icons/logo.png").inputStream())
     val icon = BitmapPainter(imageBitmap)
 
     Window(
