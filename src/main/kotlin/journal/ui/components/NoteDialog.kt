@@ -29,7 +29,7 @@ fun NoteDialog(
     onTitleChange: (String) -> Unit,
     onBodyChange: (String) -> Unit
 ) {
-    var isVisible by remember { mutableStateOf(true) }
+    val isVisible by remember { mutableStateOf(true) }
     val transition = updateTransition(targetState = isVisible, label = "Dialog Transition")
     val alpha by transition.animateFloat(
         transitionSpec = { tween(durationMillis = 500, easing = FastOutSlowInEasing) }, label = "Alpha"
@@ -51,7 +51,7 @@ fun NoteDialog(
                         Text(
                             text = if (note.id == 0) "Ajouter une note" else "Modifier la note",
                             style = MaterialTheme.typography.headlineSmall,
-                            fontWeight = FontWeight.Bold,
+                            fontWeight = FontWeight.SemiBold,
                             color = White
                         )
 

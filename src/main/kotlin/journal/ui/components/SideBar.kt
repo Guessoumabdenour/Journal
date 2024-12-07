@@ -20,14 +20,12 @@ import compose.icons.fontawesomeicons.Solid
 import compose.icons.fontawesomeicons.regular.CalendarAlt
 import compose.icons.fontawesomeicons.solid.QuoteLeft
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.input.pointer.pointerMoveFilter
+import androidx.compose.ui.input.pointer.PointerEventType
+import androidx.compose.ui.input.pointer.onPointerEvent
 import compose.icons.fontawesomeicons.regular.CalendarCheck
 import journal.model.Note
 
@@ -215,10 +213,14 @@ fun NoteItem(note: Note) {
                 if (isHovered) ElevatedDarkGray
                 else DarkerGray
             )
-            .pointerMoveFilter(
-                onEnter = { isHovered = true; false },
-                onExit = { isHovered = false; false }
-            )
+            .onPointerEvent(PointerEventType.Move) {
+            }
+            .onPointerEvent(PointerEventType.Enter) {
+                isHovered = true
+            }
+            .onPointerEvent(PointerEventType.Exit) {
+                isHovered = false
+            }
             .padding(8.dp)
     ) {
         Text(

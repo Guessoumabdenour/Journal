@@ -7,6 +7,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -19,7 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
-import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -29,6 +29,7 @@ import compose.icons.FontAwesomeIcons
 import compose.icons.feathericons.Edit
 import compose.icons.feathericons.MoreHorizontal
 import compose.icons.feathericons.Trash2
+import compose.icons.feathericons.X
 import compose.icons.fontawesomeicons.Regular
 import compose.icons.fontawesomeicons.Solid
 import compose.icons.fontawesomeicons.regular.Bookmark
@@ -45,6 +46,7 @@ fun NoteCard(
     var isHovered by remember { mutableStateOf(false) }
     var expanded by remember { mutableStateOf(false) }
     var isBookmarked by remember { mutableStateOf(false) }
+    var showDialog by remember { mutableStateOf(false) } // Track if dialog is shown
 
     // Animations for hover effect and elevation
     val backgroundColor by animateColorAsState(
@@ -61,7 +63,8 @@ fun NoteCard(
             .fillMaxWidth()
             .onPointerEvent(PointerEventType.Move) { }
             .onPointerEvent(PointerEventType.Enter) { isHovered = true }
-            .onPointerEvent(PointerEventType.Exit) { isHovered = false },
+            .onPointerEvent(PointerEventType.Exit) { isHovered = false }
+            .clickable { showDialog = true },  // Open dialog on card click
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = backgroundColor),
         elevation = CardDefaults.cardElevation(elevation),
@@ -118,7 +121,7 @@ fun NoteCard(
 
                 // Date
                 Text(
-                    text = note.dateCreated ?: "Date inconnue",
+                    text = note.dateCreated,
                     style = MaterialTheme.typography.bodySmall.copy(
                         color = Color.Gray
                     ),
@@ -141,7 +144,7 @@ fun NoteCard(
                         imageVector = FontAwesomeIcons.Solid.Bookmark,
                         contentDescription = "Favoris",
                         tint = Color.Red,
-                        modifier = Modifier.size(16.dp)
+                        modifier = Modifier.size(12.dp)
                     )
                 }
 
@@ -229,6 +232,93 @@ fun NoteCard(
             }
         }
     }
+
+    // Show Note Dialog when showDialog is true
+    if (showDialog) {
+        ViewNoteDialog(
+            note = note,
+            onDismiss = { showDialog = false }
+        )
+    }
 }
+
+@Composable
+fun ViewNoteDialog(
+    note: Note,
+    onDismiss: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black.copy(alpha = 0.7f)) // Semi-transparent background
+    ) {
+        Surface(
+            shape = RoundedCornerShape(0.dp), // Adjusted shape
+            color = DarkerGray,
+            modifier = Modifier
+                .fillMaxHeight(0.8f) // Adjust height proportionally
+                .fillMaxWidth() // Adjustwidth
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp) // Unified padding
+            ) {
+                Box(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    // Title Text
+                    Text(
+                        text = note.title.ifBlank { "Pas de titre" },
+                        style = MaterialTheme.typography.titleLarge.copy(color = Color.White),
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.align(Alignment.CenterStart) // Ensure proper alignment
+                    )
+
+                    // Close Button
+                    IconButton(
+                        onClick = onDismiss,
+                        modifier = Modifier
+                            .align(Alignment.TopEnd) // Align to top-right
+                            .padding(8.dp) // Adjust padding
+                    ) {
+                        Icon(
+                            imageVector = FeatherIcons.X,
+                            contentDescription = "Close",
+                            tint = Color.White
+                        )
+                    }
+                }
+
+                // Divider
+                Divider(
+                    modifier = Modifier.fillMaxWidth(),
+                    color = Color.White.copy(alpha = 0.1f),
+                    thickness = 1.dp
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Body
+                Text(
+                    text = note.body.ifBlank { "Pas de contenu" },
+                    style = MaterialTheme.typography.bodyMedium.copy(color = Color.White),
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Date
+                Text(
+                    text = note.dateCreated,
+                    style = MaterialTheme.typography.bodySmall.copy(color = Color.Gray)
+                )
+            }
+        }
+    }
+}
+
+
+
 
 
