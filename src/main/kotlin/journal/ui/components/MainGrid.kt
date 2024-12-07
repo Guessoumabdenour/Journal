@@ -136,12 +136,13 @@ fun NoteCard(
                 isHovered = false
                 false
             }),
-        shape = RoundedCornerShape(12.dp),
-        //elevation = elevation,  // Apply elevation directly to Card
-        //backgroundColor = backgroundColor  // Apply background color directly to Card
+        shape = RoundedCornerShape(12.dp)
     ) {
         Column(
-            modifier = Modifier.padding(16.dp).fillMaxSize(),
+            modifier = Modifier
+                .background(DarkerGray)
+                .padding(16.dp)
+                .fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.Start
         ) {
@@ -256,6 +257,7 @@ fun NoteCard(
             }
         }
     }
+
 }
 
 
