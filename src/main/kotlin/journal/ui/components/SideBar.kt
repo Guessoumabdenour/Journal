@@ -34,6 +34,8 @@ val IconColorDefault = Color(0xFFFFFFFF)
 val TextColorDefault = Color(0xFFFFFFFF)
 val SublabelColorDefault = Color(0xFFAAAAAA)
 
+
+
 @Composable
 fun SideBar(
     modifier: Modifier = Modifier.clip(RoundedCornerShape(20.dp)),
@@ -101,10 +103,32 @@ fun SideBar(
                 )
             )
 
-            NotesList(notes = notes) // Display the actual notes here
+            // Box to wrap the LazyColumn and Spacer
+            Box(modifier = Modifier.weight(1f)) {
+                // LazyColumn for the notes list
+                LazyColumn(modifier = Modifier.fillMaxSize()) {
+                    items(notes) { note ->
+                        var isVisible by remember { mutableStateOf(false) }
 
-            Spacer(modifier = Modifier.weight(1f)) // Pushes the settings to the bottom
+                        LaunchedEffect(note.id) {
+                            isVisible = true
+                        }
 
+                        this@Column.AnimatedVisibility(
+                            visible = isVisible,
+                            enter = fadeIn(animationSpec = tween(durationMillis = 500)),
+                            exit = fadeOut(animationSpec = tween(durationMillis = 500))
+                        ) {
+                            NoteItem(note = note)
+                        }
+                    }
+                }
+            }
+
+            // Spacer to push the settings to the bottom
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Settings section stays fixed at the bottom
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -135,9 +159,7 @@ fun SideBar(
                     modifier = Modifier
                 )
             }
-
         }
-
     }
 }
 
@@ -200,11 +222,10 @@ fun NoteItem(note: Note) {
             color = Color.White
         ),
         modifier = Modifier
-            .padding(vertical = 4.dp)
+            .padding(vertical = 2.dp)
             .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
             .background(ElevatedDarkGray)
-            .padding(12.dp)
+            .padding(8.dp)
     )
 }
-
