@@ -33,39 +33,19 @@ import journal.model.Note
 import java.text.SimpleDateFormat
 import java.util.*
 
-@Composable
-fun calculateCounts(notes: List<Note>): Triple<Int, Int, Int> {
-    val currentYear = Calendar.getInstance().get(Calendar.YEAR)
 
-    // Entries This Year
-    val entriesThisYear = notes.count {
-        val noteDate = SimpleDateFormat("EEEE d MMMM", Locale.FRENCH).parse(it.dateCreated)
-        val noteYear = Calendar.getInstance().apply { time = noteDate }.get(Calendar.YEAR)
-        noteYear == currentYear
-    }
-
-    // Words Written
-    val wordsWritten = notes.sumOf { note ->
-        note.body.split("\\s+".toRegex()).size // Split by spaces and count words
-    }
-
-    // Writing Days
-    val distinctWritingDays = notes.map { note ->
-        val noteDate = SimpleDateFormat("EEEE d MMMM", Locale.FRENCH).parse(note.dateCreated)
-        SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(noteDate) // Format to yyyy-MM-dd to ignore time
-    }.toSet().size
-
-    return Triple(entriesThisYear, wordsWritten, distinctWritingDays)
-}
 
 
 
 val DarkerGray = Color(0xFF1C1C1C)
+val MyRed = Color(0xFFDC5D56)
+
 val ElevatedDarkGray = Color(0xFF333333)
 val WhiteColor = Color.White
 val IconColorDefault = Color(0xFFFFFFFF)
 val TextColorDefault = Color(0xFFFFFFFF)
 val SublabelColorDefault = Color(0xFFAAAAAA)
+
 
 
 
@@ -203,6 +183,31 @@ fun SideBar(
             }
         }
     }
+}
+
+@Composable
+fun calculateCounts(notes: List<Note>): Triple<Int, Int, Int> {
+    val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+
+    // Entries This Year
+    val entriesThisYear = notes.count {
+        val noteDate = SimpleDateFormat("EEEE d MMMM", Locale.FRENCH).parse(it.dateCreated)
+        val noteYear = Calendar.getInstance().apply { time = noteDate }.get(Calendar.YEAR)
+        noteYear == currentYear
+    }
+
+    // Words Written
+    val wordsWritten = notes.sumOf { note ->
+        note.body.split("\\s+".toRegex()).size // Split by spaces and count words
+    }
+
+    // Writing Days
+    val distinctWritingDays = notes.map { note ->
+        val noteDate = SimpleDateFormat("EEEE d MMMM", Locale.FRENCH).parse(note.dateCreated)
+        SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(noteDate) // Format to yyyy-MM-dd to ignore time
+    }.toSet().size
+
+    return Triple(entriesThisYear, wordsWritten, distinctWritingDays)
 }
 
 @Composable

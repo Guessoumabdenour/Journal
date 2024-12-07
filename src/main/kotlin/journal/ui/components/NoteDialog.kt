@@ -32,22 +32,35 @@ fun NoteDialog(
     val isVisible by remember { mutableStateOf(true) }
     val transition = updateTransition(targetState = isVisible, label = "Dialog Transition")
     val alpha by transition.animateFloat(
-        transitionSpec = { tween(durationMillis = 500, easing = FastOutSlowInEasing) }, label = "Alpha"
+        transitionSpec = { tween(durationMillis = 500, easing = FastOutSlowInEasing) },
+        label = "Alpha"
     ) { if (it) 1f else 0f }
 
     Box(
-        modifier = Modifier.fillMaxHeight().fillMaxSize().padding(16.dp).alpha(alpha)
+        modifier = Modifier
+            .fillMaxSize()  // Make the Box take up the whole screen
+            .padding(16.dp)
+            .alpha(alpha)  // Handle fade-in/out animation
     ) {
         Surface(
-            shape = RoundedCornerShape(10.dp), color = DarkerGray, modifier = Modifier.fillMaxSize()
+            shape = RoundedCornerShape(10.dp),
+            color = DarkerGray,
+            modifier = Modifier
+                .fillMaxSize()  // Make sure the Surface fills the screen
         ) {
             Column(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxHeight()  // Ensure the column fills the available height
             ) {
+                // Content area that takes up most of the space (scrollable)
                 Box(
-                    modifier = Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(16.dp)
+                    modifier = Modifier
+                        .weight(1f)  // Ensure it fills the remaining space
+                        .verticalScroll(rememberScrollState())  // Make content scrollable
+                        .padding(16.dp)
                 ) {
                     Column {
+                        // Title section
                         Text(
                             text = if (note.id == 0) "Ajouter une note" else "Modifier la note",
                             style = MaterialTheme.typography.headlineSmall,
@@ -57,10 +70,11 @@ fun NoteDialog(
 
                         Spacer(modifier = Modifier.height(16.dp))
 
+                        // Title input field
                         BasicTextField(
                             value = note.title,
                             onValueChange = onTitleChange,
-                            cursorBrush = SolidColor(MainPurple), // Set cursor color to MainPurple
+                            cursorBrush = SolidColor(MainPurple),
                             decorationBox = { innerTextField ->
                                 Box(modifier = Modifier.fillMaxWidth()) {
                                     if (note.title.isEmpty()) {
@@ -69,22 +83,25 @@ fun NoteDialog(
                                             style = MaterialTheme.typography.bodyMedium.copy(color = Color.Gray)
                                         )
                                     }
-                                    // Apply white color to the actual text inside the text field
                                     innerTextField()
                                 }
                             },
-                            textStyle = MaterialTheme.typography.bodyMedium.copy(color = Color.White), // Set text color to white
+                            textStyle = MaterialTheme.typography.bodyMedium.copy(color = Color.White),
                             singleLine = true
                         )
 
                         Spacer(modifier = Modifier.height(16.dp))
-                        androidx.compose.material.Divider(color = Color.White.copy(alpha = 0.1f), thickness = 1.dp)
+
+                        // Divider between title and body
+                        Divider(color = Color.White.copy(alpha = 0.1f), thickness = 1.dp)
+
                         Spacer(modifier = Modifier.height(16.dp))
 
+                        // Body input field - make it take full remaining height
                         BasicTextField(
                             value = note.body,
                             onValueChange = onBodyChange,
-                            cursorBrush = SolidColor(MainPurple), // Set cursor color to MainPurple
+                            cursorBrush = SolidColor(MainPurple),
                             decorationBox = { innerTextField ->
                                 Box(modifier = Modifier.fillMaxWidth()) {
                                     if (note.body.isEmpty()) {
@@ -93,30 +110,39 @@ fun NoteDialog(
                                             style = MaterialTheme.typography.bodyMedium.copy(color = Color.Gray)
                                         )
                                     }
-                                    // Apply white color to the actual text inside the text field
                                     innerTextField()
                                 }
                             },
-                            textStyle = MaterialTheme.typography.bodyMedium.copy(color = Color.White), // Set text color to white
-                            maxLines = 5
+                            textStyle = MaterialTheme.typography.bodyMedium.copy(color = Color.White),
+                            maxLines = Int.MAX_VALUE,  // Let it expand indefinitely
+                            modifier = Modifier
+                                .fillMaxHeight(0.5f)  // Take up 50% of the available height
+                                .padding(vertical = 8.dp)  // Add padding to make it visually appealing
                         )
-
                     }
                 }
 
+                // Button row at the bottom (Save and Cancel)
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.End
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),  // Add padding to the buttons
+                    horizontalArrangement = Arrangement.End
                 ) {
+                    // Cancel button
                     TextButton(
-                        onClick = onDismiss, colors = ButtonDefaults.textButtonColors(contentColor = Color.Gray)
+                        onClick = onDismiss,
+                        colors = ButtonDefaults.textButtonColors(contentColor = Color.Gray)
                     ) {
                         Text("Annuler")
                     }
 
                     Spacer(modifier = Modifier.width(16.dp))
 
+                    // Save button
                     Button(
-                        onClick = onSave, colors = ButtonDefaults.buttonColors(containerColor = MainPurple)
+                        onClick = onSave,
+                        colors = ButtonDefaults.buttonColors(containerColor = MainPurple)
                     ) {
                         Text("Sauvegarder")
                     }

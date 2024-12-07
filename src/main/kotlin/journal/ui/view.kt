@@ -102,7 +102,7 @@ fun App(viewModel: MyJournalState = MyJournalState()) {
                             .background(DarkerGray),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        // Header with Greeting and Date
+
                         Surface(
                             modifier = Modifier
                                 .padding(16.dp)

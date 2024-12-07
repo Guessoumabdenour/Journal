@@ -129,12 +129,10 @@ fun NoteCard(
                 )
             }
 
-            // Bookmarked icon and options menu (Edit, Bookmark, Delete)
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
             ) {
-                // Bookmark icon
                 AnimatedVisibility(
                     visible = isBookmarked,
                     enter = fadeIn(animationSpec = tween(durationMillis = 300)),
@@ -143,14 +141,13 @@ fun NoteCard(
                     Icon(
                         imageVector = FontAwesomeIcons.Solid.Bookmark,
                         contentDescription = "Favoris",
-                        tint = Color.Red,
-                        modifier = Modifier.size(12.dp)
+                        tint = MyRed,
+                        modifier = Modifier.size(16.dp)
                     )
                 }
 
                 Spacer(modifier = Modifier.width(10.dp))
 
-                // Options Menu (Edit, Bookmark, Delete)
                 AnimatedVisibility(
                     visible = isHovered || expanded,
                     enter = fadeIn(animationSpec = tween(durationMillis = 300)),
@@ -169,7 +166,6 @@ fun NoteCard(
                             )
                         }
 
-                        // Popup for Edit, Bookmark, Delete
                         if (expanded) {
                             Box {
                                 Popup(
@@ -199,7 +195,6 @@ fun NoteCard(
                                                 modifier = Modifier.padding(vertical = 8.dp)
                                             )
 
-                                            // Bookmark option
                                             DropdownItem(
                                                 text = if (isBookmarked) "Retirer" else "Favoris",
                                                 icon = FontAwesomeIcons.Regular.Bookmark,
@@ -215,7 +210,6 @@ fun NoteCard(
                                                 modifier = Modifier.padding(vertical = 8.dp)
                                             )
 
-                                            // Delete option
                                             DropdownItem(
                                                 text = "Supprimer",
                                                 textColor = Color.Red,
@@ -233,7 +227,6 @@ fun NoteCard(
         }
     }
 
-    // Show Note Dialog when showDialog is true
     if (showDialog) {
         ViewNoteDialog(
             note = note,
@@ -242,81 +235,7 @@ fun NoteCard(
     }
 }
 
-@Composable
-fun ViewNoteDialog(
-    note: Note,
-    onDismiss: () -> Unit
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black.copy(alpha = 0.7f)) // Semi-transparent background
-    ) {
-        Surface(
-            shape = RoundedCornerShape(0.dp), // Adjusted shape
-            color = DarkerGray,
-            modifier = Modifier
-                .fillMaxHeight(0.8f) // Adjust height proportionally
-                .fillMaxWidth() // Adjustwidth
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp) // Unified padding
-            ) {
-                Box(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    // Title Text
-                    Text(
-                        text = note.title.ifBlank { "Pas de titre" },
-                        style = MaterialTheme.typography.titleLarge.copy(color = Color.White),
-                        fontWeight = FontWeight.SemiBold,
-                        modifier = Modifier.align(Alignment.CenterStart) // Ensure proper alignment
-                    )
 
-                    // Close Button
-                    IconButton(
-                        onClick = onDismiss,
-                        modifier = Modifier
-                            .align(Alignment.TopEnd) // Align to top-right
-                            .padding(8.dp) // Adjust padding
-                    ) {
-                        Icon(
-                            imageVector = FeatherIcons.X,
-                            contentDescription = "Close",
-                            tint = Color.White
-                        )
-                    }
-                }
-
-                // Divider
-                Divider(
-                    modifier = Modifier.fillMaxWidth(),
-                    color = Color.White.copy(alpha = 0.1f),
-                    thickness = 1.dp
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Body
-                Text(
-                    text = note.body.ifBlank { "Pas de contenu" },
-                    style = MaterialTheme.typography.bodyMedium.copy(color = Color.White),
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Date
-                Text(
-                    text = note.dateCreated,
-                    style = MaterialTheme.typography.bodySmall.copy(color = Color.Gray)
-                )
-            }
-        }
-    }
-}
 
 
 
