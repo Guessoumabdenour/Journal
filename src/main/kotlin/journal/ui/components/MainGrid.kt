@@ -17,6 +17,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.text.font.FontWeight
@@ -314,6 +315,7 @@ fun NoteDialog(
                         BasicTextField(
                             value = note.title,
                             onValueChange = onTitleChange,
+                            cursorBrush = SolidColor(MainPurple), // Set cursor color to MainPurple
                             decorationBox = { innerTextField ->
                                 Box(modifier = Modifier.fillMaxWidth()) {
                                     if (note.title.isEmpty()) {
@@ -322,17 +324,22 @@ fun NoteDialog(
                                             style = MaterialTheme.typography.bodyMedium.copy(color = Color.Gray)
                                         )
                                     }
+                                    // Apply white color to the actual text inside the text field
                                     innerTextField()
                                 }
                             },
+                            textStyle = MaterialTheme.typography.bodyMedium.copy(color = Color.White), // Set text color to white
                             singleLine = true
                         )
 
+                        Spacer(modifier = Modifier.height(16.dp))
+                        androidx.compose.material.Divider(color = Color.White.copy(alpha = 0.1f), thickness = 1.dp)
                         Spacer(modifier = Modifier.height(16.dp))
 
                         BasicTextField(
                             value = note.body,
                             onValueChange = onBodyChange,
+                            cursorBrush = SolidColor(MainPurple), // Set cursor color to MainPurple
                             decorationBox = { innerTextField ->
                                 Box(modifier = Modifier.fillMaxWidth()) {
                                     if (note.body.isEmpty()) {
@@ -341,11 +348,14 @@ fun NoteDialog(
                                             style = MaterialTheme.typography.bodyMedium.copy(color = Color.Gray)
                                         )
                                     }
+                                    // Apply white color to the actual text inside the text field
                                     innerTextField()
                                 }
                             },
+                            textStyle = MaterialTheme.typography.bodyMedium.copy(color = Color.White), // Set text color to white
                             maxLines = 5
                         )
+
                     }
                 }
 
