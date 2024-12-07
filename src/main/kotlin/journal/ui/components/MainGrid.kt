@@ -17,20 +17,15 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import compose.icons.FeatherIcons
 import compose.icons.FontAwesomeIcons
-import compose.icons.feathericons.CloudOff
-import compose.icons.feathericons.Edit
-import compose.icons.feathericons.MoreHorizontal
-import compose.icons.feathericons.Trash2
+import compose.icons.feathericons.*
 import compose.icons.fontawesomeicons.Regular
 import compose.icons.fontawesomeicons.Solid
 import compose.icons.fontawesomeicons.regular.Bookmark
@@ -42,6 +37,9 @@ import journal.ui.White
 import myjournal.view.components.DarkerGray
 import myjournal.view.components.ElevatedDarkGray
 import myjournal.view.components.IconColorDefault
+
+
+
 
 @Composable
 fun MainGrid(viewModel: MyJournalState) {
@@ -69,15 +67,24 @@ fun MainGrid(viewModel: MyJournalState) {
         }
 
         FloatingActionButton(
+            shape = RoundedCornerShape(100.dp),
+            containerColor = MainPurple,
             onClick = {
                 viewModel.editNote(Note(id = 0, title = "", body = ""))
             },
             contentColor = White,
-            modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp)
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(16.dp)
+
         ) {
             Icon(
-                imageVector = FeatherIcons.CloudOff,
-                contentDescription = "Add Note", modifier = Modifier.size(24.dp)
+                tint = White,
+                imageVector = FeatherIcons.Plus,
+                contentDescription = "Add Note", modifier = Modifier
+                    .background(MainPurple)
+
+                    .size(24.dp)
             )
         }
 
@@ -98,7 +105,7 @@ fun MainGrid(viewModel: MyJournalState) {
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun NoteCard(
     note: Note, onClick: () -> Unit, onDelete: () -> Unit
@@ -107,21 +114,31 @@ fun NoteCard(
     var expanded by remember { mutableStateOf(false) }
     var isBookmarked by remember { mutableStateOf(false) }
 
+    // Animate background color based on hover state
     val backgroundColor by animateColorAsState(
         targetValue = if (isHovered) ElevatedDarkGray else DarkerGray, animationSpec = tween(durationMillis = 300)
     )
 
+    // Animate elevation (shadow) based on hover state
     val elevation by animateDpAsState(
         targetValue = if (isHovered) 8.dp else 4.dp, animationSpec = tween(durationMillis = 300)
     )
 
-    Card(modifier = Modifier.padding(8.dp).fillMaxWidth().pointerMoveFilter(onEnter = {
-        isHovered = true
-        false
-    }, onExit = {
-        isHovered = false
-        false
-    }), shape = RoundedCornerShape(12.dp)) {
+    Card(
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth()
+            .pointerMoveFilter(onEnter = {
+                isHovered = true
+                false
+            }, onExit = {
+                isHovered = false
+                false
+            }),
+        shape = RoundedCornerShape(12.dp),
+        //elevation = elevation,  // Apply elevation directly to Card
+        //backgroundColor = backgroundColor  // Apply background color directly to Card
+    ) {
         Column(
             modifier = Modifier.padding(16.dp).fillMaxSize(),
             verticalArrangement = Arrangement.Center,
@@ -239,6 +256,7 @@ fun NoteCard(
         }
     }
 }
+
 
 @Composable
 fun DropdownItem(
