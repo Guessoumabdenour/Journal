@@ -125,6 +125,7 @@ fun NoteCard(
         targetValue = if (isHovered) 8.dp else 4.dp, animationSpec = tween(durationMillis = 300)
     )
 
+    // Animate the card's background color dynamically based on hover state
     Card(
         modifier = Modifier
             .padding(8.dp)
@@ -136,7 +137,10 @@ fun NoteCard(
                 isHovered = false
                 false
             }),
-        shape = RoundedCornerShape(12.dp)
+        shape = RoundedCornerShape(12.dp),
+
+        colors = CardDefaults.cardColors(containerColor = backgroundColor),
+        elevation = CardDefaults.cardElevation(elevation), // Animate elevation (shadow) on hover
     ) {
         Column(
             modifier = Modifier
@@ -257,8 +261,8 @@ fun NoteCard(
             }
         }
     }
-
 }
+
 
 
 @Composable
