@@ -35,17 +35,14 @@ import journal.model.MyJournalState
 import journal.model.Note
 import journal.ui.MainPurple
 import journal.ui.White
-import myjournal.view.components.DarkerGray
-import myjournal.view.components.ElevatedDarkGray
-import myjournal.view.components.IconColorDefault
-
-
+import journal.ui.components.DarkerGray
+import journal.ui.components.ElevatedDarkGray
+import journal.ui.components.IconColorDefault
 
 
 @Composable
 fun MainGrid(viewModel: MyJournalState) {
     val notes = viewModel.notes
-
     val sortedNotes = notes.sortedByDescending { it.id }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -60,6 +57,9 @@ fun MainGrid(viewModel: MyJournalState) {
                 })
             }
         }
+
+        //LeftNavigationBar(notes = sortedNotes)
+
 
         if (viewModel.currentNote != null) {
             Box(
@@ -122,7 +122,7 @@ fun NoteCard(
 
     // Animate elevation (shadow) based on hover state
     val elevation by animateDpAsState(
-        targetValue = if (isHovered) 8.dp else 4.dp, animationSpec = tween(durationMillis = 300)
+        targetValue = if (isHovered) 4.dp else 4.dp, animationSpec = tween(durationMillis = 300)
     )
 
     // Animate the card's background color dynamically based on hover state
@@ -140,7 +140,7 @@ fun NoteCard(
         shape = RoundedCornerShape(12.dp),
 
         colors = CardDefaults.cardColors(containerColor = backgroundColor),
-        elevation = CardDefaults.cardElevation(elevation), // Animate elevation (shadow) on hover
+        elevation = CardDefaults.cardElevation(elevation),
     ) {
         Column(
             modifier = Modifier

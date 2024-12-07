@@ -14,10 +14,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import myjournal.view.components.DarkerGray
-import myjournal.view.components.IconColorDefault
-import myjournal.view.components.SublabelColorDefault
-import myjournal.view.components.TextColorDefault
 
 @Composable
 fun CustomButton(
