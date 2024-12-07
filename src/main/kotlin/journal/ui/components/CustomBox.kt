@@ -16,7 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun CustomButton(
+fun CustomBox(
     icon: ImageVector,
     label: String,
     sublabel: String? = null,

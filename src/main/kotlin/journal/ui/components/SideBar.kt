@@ -20,9 +20,14 @@ import compose.icons.fontawesomeicons.Solid
 import compose.icons.fontawesomeicons.regular.CalendarAlt
 import compose.icons.fontawesomeicons.solid.QuoteLeft
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.pointerMoveFilter
 import compose.icons.fontawesomeicons.regular.CalendarCheck
 import journal.model.Note
 
@@ -65,7 +70,7 @@ fun SideBar(
                 modifier = Modifier.padding(top = 0.dp, bottom = 12.dp)
             )
 
-            CustomButton(
+            CustomBox(
                 icon = FontAwesomeIcons.Regular.CalendarCheck,
                 label = "1",
                 sublabel = "entrée cette année",
@@ -74,7 +79,7 @@ fun SideBar(
 
             Spacer(modifier = Modifier.height(6.dp))
 
-            CustomButton(
+            CustomBox(
                 icon = FontAwesomeIcons.Solid.QuoteLeft,
                 label = "11",
                 sublabel = "Mots écrits",
@@ -83,7 +88,7 @@ fun SideBar(
 
             Spacer(modifier = Modifier.height(6.dp))
 
-            CustomButton(
+            CustomBox(
                 icon = FontAwesomeIcons.Regular.CalendarAlt,
                 label = "1",
                 sublabel = "jour d'écriture",
@@ -196,40 +201,34 @@ fun SettingsItem(
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class)
-@Composable
-fun NotesList(notes: List<Note>) {
-    LazyColumn {
-        items(notes) { note ->
-            var isVisible by remember { mutableStateOf(false) }
-
-            LaunchedEffect(note.id) {
-                isVisible = true
-            }
-
-            AnimatedVisibility(
-                visible = isVisible,
-                enter = fadeIn(animationSpec = tween(durationMillis = 500)),
-                exit = fadeOut(animationSpec = tween(durationMillis = 500))
-            ) {
-                NoteItem(note = note)
-            }
-        }
-    }
-}
-
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun NoteItem(note: Note) {
-    Text(
-        text = note.title.ifBlank { "Pas de titre" },
-        style = MaterialTheme.typography.bodyMedium.copy(
-            color = Color.White
-        ),
+    var isHovered by remember { mutableStateOf(false) }
+
+    Box(
         modifier = Modifier
             .padding(vertical = 2.dp)
             .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
-            .background(DarkerGray) // should be elevated dark gray when hovered
+            .background(
+                if (isHovered) ElevatedDarkGray
+                else DarkerGray
+            )
+            .pointerMoveFilter(
+                onEnter = { isHovered = true; false },
+                onExit = { isHovered = false; false }
+            )
             .padding(8.dp)
-    )
+    ) {
+        Text(
+            text = note.title.ifBlank { "Pas de titre" },
+            style = MaterialTheme.typography.bodyMedium.copy(
+                color = Color.White
+            )
+        )
+    }
+
 }
+
+
