@@ -58,7 +58,9 @@ fun SideBar(
             Text(
                 text = "Journal",
                 style = MaterialTheme.typography.headlineSmall.copy(
-                    color = WhiteColor, fontWeight = FontWeight.Bold
+                    color = WhiteColor,
+                    fontWeight = FontWeight.SemiBold
+
                 ),
                 modifier = Modifier.padding(top = 0.dp, bottom = 12.dp)
             )
@@ -96,7 +98,8 @@ fun SideBar(
             Text(
                 text = "Notes récentes",
                 style = MaterialTheme.typography.headlineSmall.copy(
-                    color = WhiteColor, fontWeight = FontWeight.Bold
+                    color = WhiteColor,                                     fontWeight = FontWeight.SemiBold
+
                 ),
                 modifier = Modifier.padding(
                     top = 8.dp, bottom = 8.dp
@@ -140,7 +143,8 @@ fun SideBar(
                 Text(
                     text = "Paramètres",
                     style = MaterialTheme.typography.headlineSmall.copy(
-                        color = WhiteColor, fontWeight = FontWeight.Bold
+                        color = WhiteColor,                                     fontWeight = FontWeight.SemiBold
+
                     ),
                     modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)
                 )
@@ -225,7 +229,7 @@ fun NoteItem(note: Note) {
             .padding(vertical = 2.dp)
             .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
-            .background(ElevatedDarkGray)
+            .background(DarkerGray) // should be elevated dark gray when hovered
             .padding(8.dp)
     )
 }
