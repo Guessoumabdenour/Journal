@@ -29,7 +29,6 @@ import compose.icons.FontAwesomeIcons
 import compose.icons.feathericons.Edit
 import compose.icons.feathericons.MoreHorizontal
 import compose.icons.feathericons.Trash2
-import compose.icons.feathericons.X
 import compose.icons.fontawesomeicons.Regular
 import compose.icons.fontawesomeicons.Solid
 import compose.icons.fontawesomeicons.regular.Bookmark
@@ -46,9 +45,8 @@ fun NoteCard(
     var isHovered by remember { mutableStateOf(false) }
     var expanded by remember { mutableStateOf(false) }
     var isBookmarked by remember { mutableStateOf(false) }
-    var showDialog by remember { mutableStateOf(false) } // Track if dialog is shown
+    var showDialog by remember { mutableStateOf(false) }
 
-    // Animations for hover effect and elevation
     val backgroundColor by animateColorAsState(
         targetValue = if (isHovered) ElevatedDarkGray else DarkerGray, animationSpec = tween(durationMillis = 300)
     )
@@ -56,7 +54,6 @@ fun NoteCard(
         targetValue = if (isHovered) 4.dp else 4.dp, animationSpec = tween(durationMillis = 300)
     )
 
-    // Main Card
     Card(
         modifier = Modifier
             .padding(8.dp)
@@ -64,7 +61,7 @@ fun NoteCard(
             .onPointerEvent(PointerEventType.Move) { }
             .onPointerEvent(PointerEventType.Enter) { isHovered = true }
             .onPointerEvent(PointerEventType.Exit) { isHovered = false }
-            .clickable { showDialog = true },  // Open dialog on card click
+            .clickable { showDialog = true },
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = backgroundColor),
         elevation = CardDefaults.cardElevation(elevation),
@@ -77,7 +74,6 @@ fun NoteCard(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start
         ) {
-            // Title
             Text(
                 text = note.title.ifBlank { "Pas de titre" },
                 style = MaterialTheme.typography.bodyMedium.copy(
@@ -92,7 +88,6 @@ fun NoteCard(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Divider separating the title and body
             Divider(
                 modifier = Modifier.fillMaxWidth(),
                 color = Color.White.copy(alpha = 0.1f),
@@ -101,12 +96,10 @@ fun NoteCard(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Row for Body and Date
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.Top
             ) {
-                // Body Text
                 Text(
                     text = note.body.ifBlank { "Pas de contenu" },
                     style = MaterialTheme.typography.bodyMedium.copy(
@@ -119,7 +112,6 @@ fun NoteCard(
 
                 Spacer(modifier = Modifier.width(16.dp))
 
-                // Date
                 Text(
                     text = note.dateCreated,
                     style = MaterialTheme.typography.bodySmall.copy(
@@ -148,7 +140,6 @@ fun NoteCard(
 
                 Spacer(modifier = Modifier.width(10.dp))
 
-                // Ensure MoreHorizontal button is always visible
                 Box {
                     IconButton(
                         onClick = { expanded = !expanded },
@@ -175,7 +166,6 @@ fun NoteCard(
                                         .padding(16.dp)
                                 ) {
                                     Column {
-                                        // Edit option
                                         DropdownItem(
                                             text = "Editer",
                                             icon = FeatherIcons.Edit,

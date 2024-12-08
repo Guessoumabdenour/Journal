@@ -192,22 +192,19 @@ fun SideBar(
 fun calculateCounts(notes: List<Note>): Triple<Int, Int, Int> {
     val currentYear = Calendar.getInstance().get(Calendar.YEAR)
 
-    // Entries This Year
     val entriesThisYear = notes.count {
         val noteDate = SimpleDateFormat("EEEE d MMMM", Locale.FRENCH).parse(it.dateCreated)
         val noteYear = Calendar.getInstance().apply { time = noteDate }.get(Calendar.YEAR)
         noteYear == currentYear
     }
 
-    // Words Written
     val wordsWritten = notes.sumOf { note ->
-        note.body.split("\\s+".toRegex()).size // Split by spaces and count words
+        note.body.split("\\s+".toRegex()).size
     }
 
-    // Writing Days
     val distinctWritingDays = notes.map { note ->
         val noteDate = SimpleDateFormat("EEEE d MMMM", Locale.FRENCH).parse(note.dateCreated)
-        SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(noteDate) // Format to yyyy-MM-dd to ignore time
+        SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(noteDate)
     }.toSet().size
 
     return Triple(entriesThisYear, wordsWritten, distinctWritingDays)
@@ -246,7 +243,7 @@ fun SettingsItem(
 @Composable
 fun NoteItem(note: Note) {
     var isHovered by remember { mutableStateOf(false) }
-    val scrollState = rememberScrollState()  // Scroll state to handle scrolling
+    val scrollState = rememberScrollState()
 
     Box(
         modifier = Modifier
@@ -265,13 +262,10 @@ fun NoteItem(note: Note) {
             }
             .padding(8.dp)
     ) {
-        // Wrap the scroll animation logic in LaunchedEffect
         LaunchedEffect(isHovered) {
             if (isHovered) {
-                // Start scrolling the text when hovered
                 scrollState.animateScrollTo(0)
             } else {
-                // Stop scrolling when not hovered
                 scrollState.animateScrollTo(0)
             }
         }
@@ -281,11 +275,11 @@ fun NoteItem(note: Note) {
             style = MaterialTheme.typography.bodyMedium.copy(
                 color = Color.White
             ),
-            maxLines = 1,  // Ensure only 1 line is shown
-            overflow = TextOverflow.Ellipsis,  // Truncate if text is too long
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
             modifier = Modifier
-                .horizontalScroll(scrollState)  // Enable horizontal scrolling
-                .animateContentSize(tween(durationMillis = 300))  // Smooth transition on hover
+                .horizontalScroll(scrollState)
+                .animateContentSize(tween(durationMillis = 300))
         )
     }
 }

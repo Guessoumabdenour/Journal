@@ -38,29 +38,27 @@ fun NoteDialog(
 
     Box(
         modifier = Modifier
-            .fillMaxSize()  // Make the Box take up the whole screen
+            .fillMaxSize()
             .padding(16.dp)
-            .alpha(alpha)  // Handle fade-in/out animation
+            .alpha(alpha)
     ) {
         Surface(
             shape = RoundedCornerShape(10.dp),
             color = DarkerGray,
             modifier = Modifier
-                .fillMaxSize()  // Make sure the Surface fills the screen
+                .fillMaxSize()
         ) {
             Column(
                 modifier = Modifier
-                    .fillMaxHeight()  // Ensure the column fills the available height
+                    .fillMaxHeight()
             ) {
-                // Content area that takes up most of the space (scrollable)
                 Box(
                     modifier = Modifier
-                        .weight(1f)  // Ensure it fills the remaining space
-                        .verticalScroll(rememberScrollState())  // Make content scrollable
+                        .weight(1f)
+                        .verticalScroll(rememberScrollState())
                         .padding(16.dp)
                 ) {
                     Column {
-                        // Title section
                         Text(
                             text = if (note.id == 0) "Ajouter une note" else "Modifier la note",
                             style = MaterialTheme.typography.headlineSmall,
@@ -70,7 +68,6 @@ fun NoteDialog(
 
                         Spacer(modifier = Modifier.height(16.dp))
 
-                        // Title input field
                         BasicTextField(
                             value = note.title,
                             onValueChange = onTitleChange,
@@ -92,12 +89,10 @@ fun NoteDialog(
 
                         Spacer(modifier = Modifier.height(16.dp))
 
-                        // Divider between title and body
                         Divider(color = Color.White.copy(alpha = 0.1f), thickness = 1.dp)
 
                         Spacer(modifier = Modifier.height(16.dp))
 
-                        // Body input field - make it take full remaining height
                         BasicTextField(
                             value = note.body,
                             onValueChange = onBodyChange,
@@ -114,22 +109,21 @@ fun NoteDialog(
                                 }
                             },
                             textStyle = MaterialTheme.typography.bodyMedium.copy(color = Color.White),
-                            maxLines = Int.MAX_VALUE,  // Let it expand indefinitely
+                            maxLines = Int.MAX_VALUE,
                             modifier = Modifier
-                                .fillMaxHeight(0.5f)  // Take up 50% of the available height
-                                .padding(vertical = 8.dp)  // Add padding to make it visually appealing
+                                .fillMaxHeight(0.5f)
+                                .padding(vertical = 8.dp)
                         )
                     }
                 }
 
-                // Button row at the bottom (Save and Cancel)
+
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp),  // Add padding to the buttons
+                        .padding(16.dp),
                     horizontalArrangement = Arrangement.End
                 ) {
-                    // Cancel button
                     TextButton(
                         onClick = onDismiss,
                         colors = ButtonDefaults.textButtonColors(contentColor = Color.Gray)
@@ -139,7 +133,6 @@ fun NoteDialog(
 
                     Spacer(modifier = Modifier.width(16.dp))
 
-                    // Save button
                     Button(
                         onClick = onSave,
                         colors = ButtonDefaults.buttonColors(containerColor = MainPurple)

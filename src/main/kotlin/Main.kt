@@ -34,13 +34,10 @@ fun AppWithTransition() {
     var showSplash by remember { mutableStateOf(true) }
     val viewModel = MyJournalState()
 
-    // Use a Crossfade transition for the smooth switch between Splash and Main UI
     Crossfade(targetState = showSplash, animationSpec = tween(durationMillis = 1200, easing = { it })) { isSplashScreen ->
         if (isSplashScreen) {
-            // Splash Screen composable
             SplashScreen(onSplashFinish = { showSplash = false })
         } else {
-            // Main App screen
             MaterialTheme {
                 Column {
                     App(viewModel)
@@ -49,38 +46,32 @@ fun AppWithTransition() {
         }
     }
 
-    // Handle splash screen duration
     LaunchedEffect(Unit) {
-        delay(3000)  // Splash screen duration (3 seconds)
+        delay(3000)
         showSplash = false
     }
 }
 
 @Composable
 fun SplashScreen(onSplashFinish: () -> Unit) {
-    // Splash Screen with transparent background and centered logo
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        // Transparent background, using Color.Transparent
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.Transparent) // Transparent background
+                .background(Color.Transparent)
         )
-
-        // Centered and resized logo
         Image(
-            painter = painterResource("icons/logo.png"), // Replace with your logo file
+            painter = painterResource("icons/logo.png"),
             contentDescription = "Logo",
-            modifier = Modifier.size(200.dp) // Adjust size
+            modifier = Modifier.size(200.dp)
         )
 
-        // Trigger the finish after delay (3 seconds)
         LaunchedEffect(Unit) {
             delay(3000)
-            onSplashFinish() // Transition to main app after splash duration
+            onSplashFinish()
         }
     }
 }
@@ -89,7 +80,6 @@ fun main() = application {
     val imageBitmap = loadImageBitmap(File("src/main/resources/icons/logo.png").inputStream())
     val icon = BitmapPainter(imageBitmap)
 
-    // Window setup with transparent background and undecorated
     val windowState = rememberWindowState(placement = WindowPlacement.Maximized)
 
     Window(
@@ -97,9 +87,8 @@ fun main() = application {
         title = "Journal",
         icon = icon,
         state = windowState,
-        transparent = false,  // Ensure the window is not fully transparent for a background color
+        transparent = false,
     ) {
-        // Apply a purple background color to the window
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -107,7 +96,7 @@ fun main() = application {
                     Brush.verticalGradient(
                         colors = listOf(DarkPurple, LightPurple)
                     )
-                )// Purple background color
+                )
         ) {
             AppWithTransition()
             AppWithTransition()
