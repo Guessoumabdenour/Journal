@@ -24,6 +24,7 @@ dependencies {
     implementation("br.com.devsrsouza.compose.icons:font-awesome:1.1.1")
     implementation("br.com.devsrsouza.compose.icons:feather:1.1.1")
     implementation("org.jetbrains.compose.material3:material3-desktop:1.2.1")
+
 }
 
 compose.desktop {

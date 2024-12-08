@@ -20,12 +20,15 @@ import compose.icons.fontawesomeicons.Solid
 import compose.icons.fontawesomeicons.regular.CalendarAlt
 import compose.icons.fontawesomeicons.solid.QuoteLeft
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
+import androidx.compose.ui.text.style.TextOverflow
 import compose.icons.fontawesomeicons.regular.CalendarCheck
 import journal.model.MyJournalState
 import journal.model.Note
@@ -243,6 +246,7 @@ fun SettingsItem(
 @Composable
 fun NoteItem(note: Note) {
     var isHovered by remember { mutableStateOf(false) }
+    val scrollState = rememberScrollState()  // Scroll state to handle scrolling
 
     Box(
         modifier = Modifier
@@ -253,8 +257,6 @@ fun NoteItem(note: Note) {
                 if (isHovered) ElevatedDarkGray
                 else DarkerGray
             )
-            .onPointerEvent(PointerEventType.Move) {
-            }
             .onPointerEvent(PointerEventType.Enter) {
                 isHovered = true
             }
@@ -263,14 +265,30 @@ fun NoteItem(note: Note) {
             }
             .padding(8.dp)
     ) {
+        // Wrap the scroll animation logic in LaunchedEffect
+        LaunchedEffect(isHovered) {
+            if (isHovered) {
+                // Start scrolling the text when hovered
+                scrollState.animateScrollTo(0)
+            } else {
+                // Stop scrolling when not hovered
+                scrollState.animateScrollTo(0)
+            }
+        }
+
         Text(
             text = note.title.ifBlank { "Pas de titre" },
             style = MaterialTheme.typography.bodyMedium.copy(
                 color = Color.White
-            )
+            ),
+            maxLines = 1,  // Ensure only 1 line is shown
+            overflow = TextOverflow.Ellipsis,  // Truncate if text is too long
+            modifier = Modifier
+                .horizontalScroll(scrollState)  // Enable horizontal scrolling
+                .animateContentSize(tween(durationMillis = 300))  // Smooth transition on hover
         )
     }
-
 }
+
 
 

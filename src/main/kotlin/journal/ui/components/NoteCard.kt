@@ -142,81 +142,76 @@ fun NoteCard(
                         imageVector = FontAwesomeIcons.Solid.Bookmark,
                         contentDescription = "Favoris",
                         tint = MyRed,
-                        modifier = Modifier.size(16.dp)
+                        modifier = Modifier.size(24.dp)
                     )
                 }
 
                 Spacer(modifier = Modifier.width(10.dp))
 
-                AnimatedVisibility(
-                    visible = isHovered || expanded,
-                    enter = fadeIn(animationSpec = tween(durationMillis = 300)),
-                    exit = fadeOut(animationSpec = tween(durationMillis = 300)),
-                ) {
-                    Box {
-                        IconButton(
-                            onClick = { expanded = !expanded },
-                            modifier = Modifier.size(24.dp)
-                        ) {
-                            Icon(
-                                imageVector = FeatherIcons.MoreHorizontal,
-                                contentDescription = "Options supplémentaires",
-                                tint = IconColorDefault,
-                                modifier = Modifier.size(16.dp)
-                            )
-                        }
+                // Ensure MoreHorizontal button is always visible
+                Box {
+                    IconButton(
+                        onClick = { expanded = !expanded },
+                        modifier = Modifier.size(24.dp)
+                    ) {
+                        Icon(
+                            imageVector = FeatherIcons.MoreHorizontal,
+                            contentDescription = "Options supplémentaires",
+                            tint = IconColorDefault,
+                            modifier = Modifier.size(16.dp)
+                        )
+                    }
 
-                        if (expanded) {
-                            Box {
-                                Popup(
-                                    alignment = Alignment.TopEnd,
-                                    onDismissRequest = { expanded = false }
+                    if (expanded) {
+                        Box {
+                            Popup(
+                                alignment = Alignment.TopEnd,
+                                onDismissRequest = { expanded = false }
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .background(ElevatedDarkGray, RoundedCornerShape(10.dp))
+                                        .width(250.dp)
+                                        .padding(16.dp)
                                 ) {
-                                    Box(
-                                        modifier = Modifier
-                                            .background(ElevatedDarkGray, RoundedCornerShape(10.dp))
-                                            .width(250.dp)
-                                            .padding(16.dp)
-                                    ) {
-                                        Column {
-                                            // Edit option
-                                            DropdownItem(
-                                                text = "Editer",
-                                                icon = FeatherIcons.Edit,
-                                                iconTint = Color.White,
-                                                onClick = {
-                                                    expanded = false
-                                                    onClick()
-                                                })
+                                    Column {
+                                        // Edit option
+                                        DropdownItem(
+                                            text = "Editer",
+                                            icon = FeatherIcons.Edit,
+                                            iconTint = Color.White,
+                                            onClick = {
+                                                expanded = false
+                                                onClick()
+                                            })
 
-                                            Divider(
-                                                color = Color.White.copy(alpha = 0.1f),
-                                                thickness = 1.dp,
-                                                modifier = Modifier.padding(vertical = 8.dp)
-                                            )
+                                        Divider(
+                                            color = Color.White.copy(alpha = 0.1f),
+                                            thickness = 1.dp,
+                                            modifier = Modifier.padding(vertical = 8.dp)
+                                        )
 
-                                            DropdownItem(
-                                                text = if (isBookmarked) "Retirer" else "Favoris",
-                                                icon = FontAwesomeIcons.Regular.Bookmark,
-                                                iconTint = Color.White,
-                                                onClick = {
-                                                    isBookmarked = !isBookmarked
-                                                    expanded = false
-                                                })
+                                        DropdownItem(
+                                            text = if (isBookmarked) "Retirer" else "Favoris",
+                                            icon = FontAwesomeIcons.Regular.Bookmark,
+                                            iconTint = Color.White,
+                                            onClick = {
+                                                isBookmarked = !isBookmarked
+                                                expanded = false
+                                            })
 
-                                            Divider(
-                                                color = Color.White.copy(alpha = 0.1f),
-                                                thickness = 1.dp,
-                                                modifier = Modifier.padding(vertical = 8.dp)
-                                            )
+                                        Divider(
+                                            color = Color.White.copy(alpha = 0.1f),
+                                            thickness = 1.dp,
+                                            modifier = Modifier.padding(vertical = 8.dp)
+                                        )
 
-                                            DropdownItem(
-                                                text = "Supprimer",
-                                                textColor = Color.Red,
-                                                icon = FeatherIcons.Trash2,
-                                                iconTint = Color.Red,
-                                                onClick = { onDelete() })
-                                        }
+                                        DropdownItem(
+                                            text = "Supprimer",
+                                            textColor = Color.Red,
+                                            icon = FeatherIcons.Trash2,
+                                            iconTint = Color.Red,
+                                            onClick = { onDelete() })
                                     }
                                 }
                             }
@@ -224,6 +219,7 @@ fun NoteCard(
                     }
                 }
             }
+
         }
     }
 

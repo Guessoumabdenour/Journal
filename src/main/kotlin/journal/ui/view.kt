@@ -109,7 +109,7 @@ fun App(viewModel: MyJournalState = MyJournalState()) {
                                 .clip(RoundedCornerShape(10.dp))
                                 .height(60.dp)
                                 .fillMaxWidth(),
-                            color = DarkGray.copy(alpha = 0.8f),
+                            color = DarkGray.copy(alpha = 0.2f),
                             shape = RoundedCornerShape(10.dp)
                         ) {
                             Box(modifier = Modifier.fillMaxSize().padding(start = 16.dp, end = 16.dp)) {
@@ -137,7 +137,7 @@ fun App(viewModel: MyJournalState = MyJournalState()) {
                                         style = TextStyle(
                                             fontSize = 24.sp,
                                             color = White,
-                                            fontWeight = FontWeight.SemiBold
+                                            fontWeight = FontWeight.Medium
                                         ),
                                         maxLines = 1,
                                         overflow = TextOverflow.Ellipsis
