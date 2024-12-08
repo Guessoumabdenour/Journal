@@ -23,8 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import journal.ui.DarkPurple
-import journal.ui.LightPurple
+import journal.ui.theme.*
 import kotlinx.coroutines.delay
 import java.io.File
 

@@ -13,6 +13,8 @@ import androidx.compose.ui.unit.dp
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.X
 import journal.model.Note
+import journal.ui.theme.*
+
 
 @Composable
 fun ViewNoteDialog(

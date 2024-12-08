@@ -13,9 +13,9 @@ import compose.icons.FeatherIcons
 import compose.icons.feathericons.*
 import journal.model.MyJournalState
 import journal.model.Note
-import journal.ui.MainPurple
-import journal.ui.White
 import journal.ui.components.*
+import journal.ui.theme.*
+
 
 
 @Composable

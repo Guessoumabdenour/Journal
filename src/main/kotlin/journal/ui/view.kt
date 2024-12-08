@@ -23,18 +23,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.Plus
-
 import journal.model.MyJournalState
 import journal.model.MyJournalState.Companion.getCurrentDate
-import journal.ui.components.DarkerGray
 import journal.ui.components.SideBar
+import journal.ui.theme.*
 
 
-val DarkGray = Color(0xFF2F2F2F)
-val White = Color(0xFFFFFFFF)
-val LightPurple = Color(0xFF301E34)
-val DarkPurple = Color(0xFF080812)
-val MainPurple = Color(0xFF5E5BE6)
+
 
 @Preview
 @Composable

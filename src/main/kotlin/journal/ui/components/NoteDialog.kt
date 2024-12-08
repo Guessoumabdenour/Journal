@@ -18,8 +18,8 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import journal.model.Note
-import journal.ui.MainPurple
-import journal.ui.White
+import journal.ui.theme.*
+
 
 @Composable
 fun NoteDialog(

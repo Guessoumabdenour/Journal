@@ -32,22 +32,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import compose.icons.fontawesomeicons.regular.CalendarCheck
 import journal.model.MyJournalState
 import journal.model.Note
+import journal.ui.theme.*
 
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-
-
-
-val DarkerGray = Color(0xFF1C1C1C)
-val MyRed = Color(0xFFDC5D56)
-
-val ElevatedDarkGray = Color(0xFF333333)
-val WhiteColor = Color.White
-val IconColorDefault = Color(0xFFFFFFFF)
-val TextColorDefault = Color(0xFFFFFFFF)
-val SublabelColorDefault = Color(0xFFAAAAAA)
 
 
 
