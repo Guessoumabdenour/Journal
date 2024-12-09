@@ -25,7 +25,6 @@ fun MainGrid(viewModel: MyJournalState) {
     val sortedNotes = notes.sortedByDescending { it.id }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        // LazyVerticalGrid to display notes in a grid format
         LazyVerticalGrid(
             columns = GridCells.Adaptive(minSize = 600.dp),
             contentPadding = PaddingValues(8.dp),
@@ -41,13 +40,11 @@ fun MainGrid(viewModel: MyJournalState) {
                 )
             }
         }
-
-        // Background overlay for dialog
         if (viewModel.currentNote != null) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(DarkerGray.copy(alpha = 0.7f))  // Semi-transparent background for dialog
+                    .background(DarkerGray.copy(alpha = 0.7f))
             )
         }
 
