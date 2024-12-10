@@ -2,10 +2,13 @@ package journal.ui
 
 import MainGrid
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -16,20 +19,18 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.*
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import compose.icons.FeatherIcons
-import compose.icons.feathericons.Plus
+import io.github.alexzhirkevich.compottie.*
 import journal.model.MyJournalState
 import journal.model.MyJournalState.Companion.getCurrentDate
 import journal.ui.components.SideBar
 import journal.ui.theme.*
-
-
-
+import utils.loadJsonFromResources
 
 @Preview
 @Composable
@@ -38,17 +39,24 @@ fun App(viewModel: MyJournalState = MyJournalState()) {
     val sortedNotes by remember { derivedStateOf { viewModel.notes.sortedByDescending { it.id } } }
     val currentDate = remember { getCurrentDate() }
     val focusRequester = remember { FocusRequester() }
+
+    val jsonData = loadJsonFromResources("hello.json") // Path to your JSON file
+    val composition by rememberLottieComposition {
+        LottieCompositionSpec.JsonString(jsonData)
+    }
+
+    val progress by animateLottieCompositionAsState(
+        composition, iterations = Compottie.IterateForever
+    )
     var isAddingNote by remember { mutableStateOf(false) }
     var newNoteTitle by remember { mutableStateOf("") }
     var newNoteBody by remember { mutableStateOf("") }
+    var searchQuery by remember { mutableStateOf("") }
+
 
     MaterialTheme {
         Box(
-            Modifier
-                .fillMaxSize()
-                .focusRequester(focusRequester)
-                .focusable()
-                .onKeyEvent { keyEvent ->
+            Modifier.fillMaxSize().focusRequester(focusRequester).focusable().onKeyEvent { keyEvent ->
                     if (keyEvent.type == KeyEventType.KeyDown && keyEvent.isCtrlPressed && keyEvent.key == Key.S) {
 
                         viewModel.currentNote?.let {
@@ -66,12 +74,9 @@ fun App(viewModel: MyJournalState = MyJournalState()) {
                     } else {
                         false
                     }
-                }
-        ) {
+                }) {
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(
+                modifier = Modifier.fillMaxSize().background(
                         Brush.verticalGradient(
                             colors = listOf(DarkPurple, LightPurple)
                         )
@@ -81,62 +86,78 @@ fun App(viewModel: MyJournalState = MyJournalState()) {
                 Row(modifier = Modifier.weight(1f)) {
 
                     SideBar(
-                        notes = sortedNotes,  // Passing the sorted notes list
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(10.dp))
-                            .padding(8.dp),
-                        myJournalState = MyJournalState()
+                        notes = sortedNotes,
+                        modifier = Modifier.clip(RoundedCornerShape(10.dp)).padding(8.dp),
+                        myJournalState = viewModel
                     )
 
                     Column(
-                        modifier = Modifier
-                            .padding(top = 8.dp, bottom = 8.dp, end = 8.dp)
-                            .clip(RoundedCornerShape(10.dp))
-                            .fillMaxSize()
-                            .weight(1f)
-                            .background(DarkerGray),
-                        horizontalAlignment = Alignment.CenterHorizontally
+                        modifier = Modifier.padding(top = 8.dp, bottom = 8.dp, end = 8.dp)
+                            .clip(RoundedCornerShape(10.dp)).fillMaxSize().weight(1f).background(DarkerGray),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
                     ) {
 
                         Surface(
-                            modifier = Modifier
-                                .padding(16.dp)
-                                .clip(RoundedCornerShape(10.dp))
-                                .height(60.dp)
-                                .fillMaxWidth(),
-                            color = DarkGray.copy(alpha = 0.2f),
-                            shape = RoundedCornerShape(10.dp)
+                            modifier = Modifier.padding(16.dp).clip(RoundedCornerShape(10.dp)).height(80.dp)
+                                .fillMaxWidth(), color = DarkGray.copy(alpha = 0.2f), shape = RoundedCornerShape(10.dp)
                         ) {
-                            Box(modifier = Modifier.fillMaxSize().padding(start = 16.dp, end = 16.dp)) {
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxHeight()
-                                        .fillMaxWidth(),
-                                    verticalAlignment = Alignment.CenterVertically
+                            Box(modifier = Modifier.fillMaxSize()) {
+                                Column(
+                                    modifier = Modifier.fillMaxSize().padding(
+                                            end = 24.dp, start = 24.dp, top = 8.dp, bottom = 8.dp
+                                        ),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center
                                 ) {
+                                    // Greeting and Date
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Image(
+                                            painter = rememberLottiePainter(
+                                            composition = composition, progress = { progress }),
+                                            contentDescription = "Lottie animation",
+                                            modifier = Modifier.size(200.dp),
+                                            contentScale = ContentScale.FillWidth)
+                                        Spacer(modifier = Modifier.width(16.dp)) // Adjusted spacing
 
-                                    Text(
-                                        text = "Bonjour,  \uD83D\uDE0A ",
-                                        style = TextStyle(
-                                            fontSize = 24.sp,
-                                            color = White,
-                                            fontWeight = FontWeight.SemiBold
-                                        ),
-                                        maxLines = 1,
-                                        overflow = TextOverflow.Ellipsis,
-                                        modifier = Modifier.weight(1f)
-                                    )
+                                        // **2. Add Search Bar**
+                                        TextField(
+                                            value = searchQuery,
+                                            onValueChange = { searchQuery = it },
+                                            placeholder = { Text("Search notes") },
+                                            trailingIcon = {
+                                                Icon(
+                                                    imageVector = Icons.Default.Search,
+                                                    contentDescription = "Search Icon",
+                                                    tint = White
+                                                )
+                                            },
+                                            singleLine = true,
+                                            colors = TextFieldDefaults.textFieldColors(
+                                                containerColor = DarkerGray,
+                                                cursorColor = MainPurple,
+                                                textColor = White,
+                                                placeholderColor = White.copy(alpha = 0.5f),
+                                                focusedIndicatorColor = Color.Transparent,
+                                                unfocusedIndicatorColor = Color.Transparent
+                                            ),
+                                            modifier = Modifier.clip(RoundedCornerShape(20.dp)) // Rounded corners for aesthetics
+                                                .background(DarkerGray)
+                                                .weight(1f) // Allows the TextField to take up remaining horizontal space
+                                                .height(50.dp)
+                                        )
 
-                                    Text(
-                                        text = currentDate,
-                                        style = TextStyle(
-                                            fontSize = 24.sp,
-                                            color = White,
-                                            fontWeight = FontWeight.Medium
-                                        ),
-                                        maxLines = 1,
-                                        overflow = TextOverflow.Ellipsis
-                                    )
+                                        Spacer(modifier = Modifier.width(16.dp)) // Adjusted spacing
+
+                                        Text(
+                                            text = currentDate, style = TextStyle(
+                                                fontSize = 24.sp, color = White, fontWeight = FontWeight.Medium
+                                            ), maxLines = 1, overflow = TextOverflow.Ellipsis
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -146,12 +167,11 @@ fun App(viewModel: MyJournalState = MyJournalState()) {
                             modifier = Modifier.fillMaxWidth().padding(8.dp)
                         ) {
                             Text(
-                                text = "Aujourd'hui",
-                                style = MaterialTheme.typography.headlineSmall.copy(
-                                    color = White,
-                                    fontWeight = FontWeight.SemiBold
-                                ),
-                                modifier = Modifier.padding(start = 12.dp)
+                                text = "Aujourd'hui", style = MaterialTheme.typography.headlineSmall.copy(
+                                    color = White, fontWeight = FontWeight.SemiBold
+                                ), modifier = Modifier.padding(
+                                    start = 12.dp,
+                                )
                             )
                         }
 
@@ -177,31 +197,7 @@ fun App(viewModel: MyJournalState = MyJournalState()) {
                                     newNoteTitle = ""
                                     newNoteBody = ""
                                     isAddingNote = false
-                                }
-                            )
-                        }
-
-                        // Floating Add Button
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(16.dp),
-                            contentAlignment = Alignment.BottomEnd
-                        ) {
-                            FloatingActionButton(
-                                onClick = { isAddingNote = true },
-                                shape = CircleShape,
-                                containerColor = MainPurple,
-                                contentColor = White,
-                                modifier = Modifier
-                                    .size(56.dp)
-                            ) {
-                                Icon(
-                                    imageVector = FeatherIcons.Plus,
-                                    contentDescription = "Add Note",
-                                    modifier = Modifier.size(24.dp)
-                                )
-                            }
+                                })
                         }
                     }
                 }
@@ -224,18 +220,12 @@ fun AddNoteForm(
     onCancel: () -> Unit
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-            .background(Color(0xFF1E1E1E), RoundedCornerShape(10.dp))
+        modifier = Modifier.fillMaxWidth().padding(16.dp).background(Color(0xFF1E1E1E), RoundedCornerShape(10.dp))
             .padding(16.dp)
     ) {
         Text(
-            text = "Ajouter une nouvelle note",
-            style = TextStyle(
-                fontSize = 20.sp,
-                color = White,
-                fontWeight = FontWeight.Bold
+            text = "Ajouter une nouvelle note", style = TextStyle(
+                fontSize = 20.sp, color = White, fontWeight = FontWeight.Bold
             )
         )
         Spacer(modifier = Modifier.height(8.dp))
@@ -243,9 +233,7 @@ fun AddNoteForm(
             value = title,
             onValueChange = onTitleChange,
             label = { Text("Titre") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color(0xFF2F2F2F), RoundedCornerShape(5.dp)),
+            modifier = Modifier.fillMaxWidth().background(Color(0xFF2F2F2F), RoundedCornerShape(5.dp)),
             colors = TextFieldDefaults.textFieldColors(
                 textColor = White,
                 cursorColor = MainPurple,
@@ -258,10 +246,7 @@ fun AddNoteForm(
             value = body,
             onValueChange = onBodyChange,
             label = { Text("Contenu") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp)
-                .background(Color(0xFF2F2F2F), RoundedCornerShape(5.dp)),
+            modifier = Modifier.fillMaxWidth().height(200.dp).background(Color(0xFF2F2F2F), RoundedCornerShape(5.dp)),
             colors = TextFieldDefaults.textFieldColors(
                 textColor = White,
                 cursorColor = MainPurple,
@@ -272,16 +257,14 @@ fun AddNoteForm(
         )
         Spacer(modifier = Modifier.height(16.dp))
         Row(
-            horizontalArrangement = Arrangement.End,
-            modifier = Modifier.fillMaxWidth()
+            horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth()
         ) {
             TextButton(onClick = onCancel) {
                 Text("Annuler", color = Color.Gray)
             }
             Spacer(modifier = Modifier.width(8.dp))
             Button(
-                onClick = onSave,
-                colors = ButtonDefaults.buttonColors(containerColor = MainPurple)
+                onClick = onSave, colors = ButtonDefaults.buttonColors(containerColor = MainPurple)
             ) {
                 Text("Enregistrer", color = White)
             }

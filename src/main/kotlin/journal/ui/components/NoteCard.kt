@@ -53,7 +53,7 @@ fun NoteCard(
         targetValue = if (isHovered) ElevatedDarkGray else DarkerGray, animationSpec = tween(durationMillis = 300)
     )
     val elevation by animateDpAsState(
-        targetValue = if (isHovered) 4.dp else 4.dp, animationSpec = tween(durationMillis = 300)
+        targetValue = if (isHovered) 8.dp else 4.dp, animationSpec = tween(durationMillis = 300)
     )
 
     Card(
@@ -163,7 +163,7 @@ fun NoteCard(
                             ) {
                                 Box(
                                     modifier = Modifier
-                                        .background(ElevatedDarkGray, RoundedCornerShape(10.dp))
+                                        .background(DarkerGray, RoundedCornerShape(10.dp))
                                         .width(250.dp)
                                         .padding(16.dp)
                                 ) {
@@ -200,9 +200,9 @@ fun NoteCard(
 
                                         DropdownItem(
                                             text = "Supprimer",
-                                            textColor = Color.Red,
+                                            textColor = MyRed,
                                             icon = FeatherIcons.Trash2,
-                                            iconTint = Color.Red,
+                                            iconTint = MyRed,
                                             onClick = { onDelete() })
                                     }
                                 }

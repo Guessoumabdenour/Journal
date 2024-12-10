@@ -39,7 +39,6 @@ fun NoteDialog(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
             .alpha(alpha)
     ) {
         Surface(
