@@ -51,6 +51,50 @@ fun MainGrid(viewModel: MyJournalState) {
             }
         }
 
+        // Overlay Layer for Animation and FAB
+        Box(modifier = Modifier.fillMaxSize()) {
+            // Animated Visibility for the Lottie Animation
+            AnimatedVisibility(
+                visible = showAnimation, // Show animation based on showAnimation state
+                enter = fadeIn(),
+                exit = fadeOut(),
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .offset(y = (-100).dp) // Move animation 100.dp upwards
+
+            ) {
+                // Load the JSON content from the resources directory
+                val jsonData = loadJsonFromResources("welcome.json") // Path to your JSON file
+
+                if (jsonData.isNotEmpty()) {
+                    // Create Lottie composition from JSON data
+                    val composition by rememberLottieComposition {
+                        LottieCompositionSpec.JsonString(jsonData)
+                    }
+
+                    val progress by animateLottieCompositionAsState(
+                        composition,
+                        iterations = Compottie.IterateForever
+                    )
+
+                    Image(
+                        painter = rememberLottiePainter(
+                            composition = composition,
+                            progress = { progress }
+                        ),
+                        contentDescription = "Lottie animation",
+                        modifier = Modifier.size(600.dp)
+                    )
+                } else {
+                    // Fallback in case JSON fails to load
+                    Box(
+                        modifier = Modifier
+                            .size(150.dp)
+                            .background(Color.Red)
+                    )
+                }
+            }
+        }
         // Floating Action Button for adding a new note
         AnimatedVisibility(
             visible = !isViewingOrEditingNote,  // Only visible when no note is being added/edited
@@ -77,6 +121,8 @@ fun MainGrid(viewModel: MyJournalState) {
                 )
             }
         }
+
+
 
         // Show the NoteDialog if a note is being edited or viewed
         if (isViewingOrEditingNote) {
