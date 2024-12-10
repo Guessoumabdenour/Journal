@@ -137,7 +137,7 @@ fun App(viewModel: MyJournalState = MyJournalState()) {
                                             },
                                             singleLine = true,
                                             colors = TextFieldDefaults.textFieldColors(
-                                                containerColor = DarkerGray,
+                                                containerColor = ElevatedDarkerGray,
                                                 cursorColor = MainPurple,
                                                 textColor = White,
                                                 placeholderColor = White.copy(alpha = 0.5f),

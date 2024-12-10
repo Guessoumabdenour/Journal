@@ -27,108 +27,59 @@ fun MainGrid(viewModel: MyJournalState) {
     val notes = viewModel.notes
     val sortedNotes = notes.sortedByDescending { it.id }
 
-    // Determine if a note is being added or edited/viewed
-    val isAddingOrEditingNote by remember { derivedStateOf { viewModel.currentNote != null } }
+    // Boolean flag to check if a note is being viewed or edited
+    val isViewingOrEditingNote by remember { derivedStateOf { viewModel.currentNote != null } }
 
     var showAnimation by remember { mutableStateOf(true) }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(minSize = 800.dp),
-            contentPadding = PaddingValues(8.dp),
-            modifier = Modifier.fillMaxSize()
+        // Conditionally show the list of notes based on `isViewingOrEditingNote` flag
+        if (!isViewingOrEditingNote) {
+            // LazyVerticalGrid for showing notes
+            LazyVerticalGrid(
+                columns = GridCells.Adaptive(minSize = 800.dp),
+                contentPadding = PaddingValues(8.dp),
+                modifier = Modifier.fillMaxSize()
+            ) {
+                items(sortedNotes) { note ->
+                    NoteCard(
+                        note = note,
+                        onClick = { viewModel.editNote(note) },  // Handle note viewing/editing
+                        onDelete = { viewModel.deleteNote(note) }
+                    )
+                }
+            }
+        }
+
+        // Floating Action Button for adding a new note
+        AnimatedVisibility(
+            visible = !isViewingOrEditingNote,  // Only visible when no note is being added/edited
+            enter = fadeIn(),
+            exit = fadeOut(),
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(16.dp)
         ) {
-            items(sortedNotes) { note ->
-                NoteCard(
-                    note = note,
-                    onClick = { viewModel.editNote(note) },  // Handle note viewing/editing
-                    onDelete = { viewModel.deleteNote(note) }
+            FloatingActionButton(
+                shape = RoundedCornerShape(100.dp),
+                containerColor = MainPurple,
+                onClick = {
+                    showAnimation = false  // Hide the animation
+                    viewModel.editNote(Note(id = 0, title = "", body = ""))  // Start editing a new note
+                },
+                contentColor = White
+            ) {
+                Icon(
+                    tint = White,
+                    imageVector = FeatherIcons.Plus,
+                    contentDescription = "Add Note",
+                    modifier = Modifier.size(24.dp)
                 )
             }
         }
 
-        if (isAddingOrEditingNote) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(DarkerGray)
-            )
-        }
-
-        Box(modifier = Modifier.fillMaxSize()) {
-            AnimatedVisibility(
-                visible = showAnimation,
-                enter = fadeIn(),
-                exit = fadeOut(),
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .offset(y = (-50).dp) // Move animation 100.dp upwards
-            ) {
-                // Load the JSON content from the resources directory
-                val jsonData = loadJsonFromResources("welcome.json") // Path to your JSON file
-
-                if (jsonData.isNotEmpty()) {
-                    // Create Lottie composition from JSON data
-                    val composition by rememberLottieComposition {
-                        LottieCompositionSpec.JsonString(jsonData)
-                    }
-
-                    val progress by animateLottieCompositionAsState(
-                        composition,
-                        iterations = Compottie.IterateForever
-                    )
-
-                    Image(
-                        painter = rememberLottiePainter(
-                            composition = composition,
-                            progress = { progress }
-                        ),
-                        contentDescription = "Lottie animation",
-                        modifier = Modifier.size(600.dp)
-                    )
-                } else {
-                    // Fallback in case JSON fails to load
-                    Box(
-                        modifier = Modifier
-                            .size(150.dp)
-                            .background(Color.Red)
-                    )
-                }
-            }
-
-            // Floating Action Button for adding a new note
-            // The FAB is only visible when no note is being added or edited/viewed
-            AnimatedVisibility(
-                visible = !isAddingOrEditingNote,
-                enter = fadeIn(),
-                exit = fadeOut(),
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(16.dp)
-            ) {
-                FloatingActionButton(
-                    shape = RoundedCornerShape(100.dp),
-                    containerColor = MainPurple,
-                    onClick = {
-                        // Set showAnimation to false to hide the animation permanently
-                        showAnimation = false
-                        // Proceed to add/edit a new note
-                        viewModel.editNote(Note(id = 0, title = "", body = ""))
-                    },
-                    contentColor = White
-                ) {
-                    Icon(
-                        tint = White,
-                        imageVector = FeatherIcons.Plus,
-                        contentDescription = "Add Note",
-                        modifier = Modifier.size(24.dp)
-                    )
-                }
-            }
-        }
-
         // Show the NoteDialog if a note is being edited or viewed
-        if (isAddingOrEditingNote) {
+        if (isViewingOrEditingNote) {
             NoteDialog(
                 note = viewModel.currentNote!!,
                 onSave = {
@@ -150,3 +101,4 @@ fun MainGrid(viewModel: MyJournalState) {
         }
     }
 }
+
