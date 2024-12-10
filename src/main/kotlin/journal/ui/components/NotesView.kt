@@ -27,8 +27,8 @@ fun MainGrid(viewModel: MyJournalState) {
     val notes = viewModel.notes
     val sortedNotes = notes.sortedByDescending { it.id }
 
-    // Determine if a note is being added or edited
-    val isAddingNote by remember { derivedStateOf { viewModel.currentNote != null } }
+    // Determine if a note is being added or edited/viewed
+    val isAddingOrEditingNote by remember { derivedStateOf { viewModel.currentNote != null } }
 
     var showAnimation by remember { mutableStateOf(true) }
 
@@ -41,32 +41,28 @@ fun MainGrid(viewModel: MyJournalState) {
             items(sortedNotes) { note ->
                 NoteCard(
                     note = note,
-                    onClick = { viewModel.editNote(note) },
+                    onClick = { viewModel.editNote(note) },  // Handle note viewing/editing
                     onDelete = { viewModel.deleteNote(note) }
                 )
             }
         }
 
-        // Overlay to darken the background when a note is being edited or added
-        if (isAddingNote) {
+        if (isAddingOrEditingNote) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(DarkerGray.copy(alpha = 0.7f))
+                    .background(DarkerGray)
             )
         }
 
-        // Overlay Layer for Animation and FAB
         Box(modifier = Modifier.fillMaxSize()) {
-            // Animated Visibility for the Lottie Animation
             AnimatedVisibility(
-                visible = showAnimation, // Show animation based on showAnimation state
+                visible = showAnimation,
                 enter = fadeIn(),
                 exit = fadeOut(),
                 modifier = Modifier
                     .align(Alignment.Center)
                     .offset(y = (-50).dp) // Move animation 100.dp upwards
-
             ) {
                 // Load the JSON content from the resources directory
                 val jsonData = loadJsonFromResources("welcome.json") // Path to your JSON file
@@ -101,31 +97,38 @@ fun MainGrid(viewModel: MyJournalState) {
             }
 
             // Floating Action Button for adding a new note
-            FloatingActionButton(
-                shape = RoundedCornerShape(100.dp),
-                containerColor = MainPurple,
-                onClick = {
-                    // Set showAnimation to false to hide the animation permanently
-                    showAnimation = false
-                    // Proceed to add/edit a new note
-                    viewModel.editNote(Note(id = 0, title = "", body = ""))
-                },
-                contentColor = White,
+            // The FAB is only visible when no note is being added or edited/viewed
+            AnimatedVisibility(
+                visible = !isAddingOrEditingNote,
+                enter = fadeIn(),
+                exit = fadeOut(),
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(16.dp)
             ) {
-                Icon(
-                    tint = White,
-                    imageVector = FeatherIcons.Plus,
-                    contentDescription = "Add Note",
-                    modifier = Modifier.size(24.dp)
-                )
+                FloatingActionButton(
+                    shape = RoundedCornerShape(100.dp),
+                    containerColor = MainPurple,
+                    onClick = {
+                        // Set showAnimation to false to hide the animation permanently
+                        showAnimation = false
+                        // Proceed to add/edit a new note
+                        viewModel.editNote(Note(id = 0, title = "", body = ""))
+                    },
+                    contentColor = White
+                ) {
+                    Icon(
+                        tint = White,
+                        imageVector = FeatherIcons.Plus,
+                        contentDescription = "Add Note",
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
             }
         }
 
-        // Show the NoteDialog if a note is being edited
-        if (isAddingNote) {
+        // Show the NoteDialog if a note is being edited or viewed
+        if (isAddingOrEditingNote) {
             NoteDialog(
                 note = viewModel.currentNote!!,
                 onSave = {

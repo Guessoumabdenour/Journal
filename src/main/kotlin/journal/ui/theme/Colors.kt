@@ -1,10 +1,9 @@
 package journal.ui.theme
 
 import androidx.compose.ui.graphics.Color
-
-val DarkerGray = Color(0xFF3D3E53)//.copy(alpha = 0.1f)
+val ElevatedDarkerGray = Color(0xFF3D3E53).copy(alpha = 0.4f)
+val DarkerGray = Color(0xFF3D3E53).copy(alpha = 0f)
 val MyRed = Color(0xFFDC5D56)
-val ElevatedDarkGray = Color(0xFF333333)
 val WhiteColor = Color.White
 val IconColorDefault = Color(0xFFFFFFFF)
 val TextColorDefault = Color(0xFFFFFFFF)

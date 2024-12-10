@@ -241,7 +241,7 @@ fun NoteItem(note: Note) {
             .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
             .background(
-                if (isHovered) ElevatedDarkGray
+                if (isHovered) ElevatedDarkerGray
                 else DarkerGray
             )
             .onPointerEvent(PointerEventType.Enter) {

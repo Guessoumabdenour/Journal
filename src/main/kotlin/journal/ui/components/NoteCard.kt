@@ -2,7 +2,6 @@ package journal.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -50,10 +49,7 @@ fun NoteCard(
     var showDialog by remember { mutableStateOf(false) }
 
     val backgroundColor by animateColorAsState(
-        targetValue = if (isHovered) ElevatedDarkGray else DarkerGray, animationSpec = tween(durationMillis = 300)
-    )
-    val elevation by animateDpAsState(
-        targetValue = if (isHovered) 8.dp else 4.dp, animationSpec = tween(durationMillis = 300)
+        targetValue = if (isHovered) ElevatedDarkerGray else DarkerGray, animationSpec = tween(durationMillis = 300)
     )
 
     Card(
@@ -66,7 +62,7 @@ fun NoteCard(
             .clickable { showDialog = true },
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = backgroundColor),
-        elevation = CardDefaults.cardElevation(elevation),
+        //elevation = CardDefaults.cardElevation(elevation),
     ) {
         Column(
             modifier = Modifier
@@ -136,7 +132,7 @@ fun NoteCard(
                         imageVector = FontAwesomeIcons.Solid.Bookmark,
                         contentDescription = "Favoris",
                         tint = MyRed,
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(16.dp)
                     )
                 }
 
@@ -145,7 +141,7 @@ fun NoteCard(
                 Box {
                     IconButton(
                         onClick = { expanded = !expanded },
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(16.dp)
                     ) {
                         Icon(
                             imageVector = FeatherIcons.MoreHorizontal,
