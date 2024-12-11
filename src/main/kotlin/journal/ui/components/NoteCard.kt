@@ -26,6 +26,7 @@ import androidx.compose.ui.window.Popup
 import compose.icons.FeatherIcons
 import compose.icons.FontAwesomeIcons
 import compose.icons.feathericons.Edit
+import compose.icons.feathericons.Info
 import compose.icons.feathericons.MoreHorizontal
 import compose.icons.feathericons.Trash2
 import compose.icons.fontawesomeicons.Regular
@@ -40,13 +41,13 @@ import journal.ui.theme.*
 @Composable
 fun NoteCard(
     note: Note,
-    onClick: () -> Unit,
+    onClickEdit: () -> Unit,
+    onClickDetails: () -> Unit,
     onDelete: () -> Unit
 ) {
     var isHovered by remember { mutableStateOf(false) }
     var expanded by remember { mutableStateOf(false) }
     var isBookmarked by remember { mutableStateOf(false) }
-    var showDialog by remember { mutableStateOf(false) }
 
     val backgroundColor by animateColorAsState(
         targetValue = if (isHovered) ElevatedDarkerGray else DarkerGray, animationSpec = tween(durationMillis = 300)
@@ -58,11 +59,9 @@ fun NoteCard(
             .fillMaxWidth()
             .onPointerEvent(PointerEventType.Move) { }
             .onPointerEvent(PointerEventType.Enter) { isHovered = true }
-            .onPointerEvent(PointerEventType.Exit) { isHovered = false }
-            .clickable { showDialog = true },
+            .onPointerEvent(PointerEventType.Exit) { isHovered = false },
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = backgroundColor),
-        //elevation = CardDefaults.cardElevation(elevation),
+        colors = CardDefaults.cardColors(containerColor = backgroundColor)
     ) {
         Column(
             modifier = Modifier
@@ -159,7 +158,7 @@ fun NoteCard(
                             ) {
                                 Box(
                                     modifier = Modifier
-                                        .background(DarkerGray, RoundedCornerShape(10.dp))
+                                        .background(ElevatedDarkerGray, RoundedCornerShape(10.dp))
                                         .width(250.dp)
                                         .padding(16.dp)
                                 ) {
@@ -170,7 +169,22 @@ fun NoteCard(
                                             iconTint = Color.White,
                                             onClick = {
                                                 expanded = false
-                                                onClick()
+                                                onClickEdit()
+                                            })
+
+                                        Divider(
+                                            color = Color.White.copy(alpha = 0.1f),
+                                            thickness = 1.dp,
+                                            modifier = Modifier.padding(vertical = 8.dp)
+                                        )
+
+                                        DropdownItem(
+                                            text = "Détails",
+                                            icon = FeatherIcons.Info,
+                                            iconTint = Color.White,
+                                            onClick = {
+                                                expanded = false
+                                                onClickDetails() // Trigger the details view logic
                                             })
 
                                         Divider(
@@ -207,17 +221,10 @@ fun NoteCard(
                     }
                 }
             }
-
         }
     }
-
-    if (showDialog) {
-        ViewNoteDialog(
-            note = note,
-            onDismiss = { showDialog = false }
-        )
-    }
 }
+
 
 
 

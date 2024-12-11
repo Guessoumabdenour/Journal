@@ -49,7 +49,7 @@ fun SideBar(
     myJournalState: MyJournalState
 
 ) {
-    val (entriesThisYear, wordsWritten, writingDays) = calculateCounts(myJournalState.notes)
+    val (wordsWritten, entriesThisYear, writingDays) = calculateCounts(myJournalState.notes)
 
     Box(
         modifier = modifier
@@ -78,7 +78,7 @@ fun SideBar(
             // Dynamically pass the count values
             CustomBox(
                 icon = FontAwesomeIcons.Regular.CalendarCheck,
-                label = entriesThisYear.toString(),
+                label = wordsWritten.toString(),
                 sublabel = "entrée cette année",
                 iconColor = Color(0xFF5E5BE6),
             )
@@ -87,7 +87,7 @@ fun SideBar(
 
             CustomBox(
                 icon = FontAwesomeIcons.Solid.QuoteLeft,
-                label = wordsWritten.toString(),
+                label = entriesThisYear.toString(),
                 sublabel = "Mots écrits",
                 iconColor = Color(0xFFC36D73),
             )

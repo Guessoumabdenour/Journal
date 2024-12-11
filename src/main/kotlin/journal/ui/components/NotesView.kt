@@ -27,14 +27,13 @@ fun MainGrid(viewModel: MyJournalState) {
     val notes = viewModel.notes
     val sortedNotes = notes.sortedByDescending { it.id }
 
-    // Boolean flag to check if a note is being viewed or edited
-    val isViewingOrEditingNote by remember { derivedStateOf { viewModel.currentNote != null } }
-
+    val isEditingNote by remember { derivedStateOf { viewModel.currentNote != null } }
     var showAnimation by remember { mutableStateOf(true) }
+    var isViewingDetails by remember { mutableStateOf(false) }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        // Conditionally show the list of notes based on `isViewingOrEditingNote` flag
-        if (!isViewingOrEditingNote) {
+        // Conditionally show the list of notes based on `isViewingDetails` flag
+        if (!isViewingDetails && !isEditingNote) {
             // LazyVerticalGrid for showing notes
             LazyVerticalGrid(
                 columns = GridCells.Adaptive(minSize = 800.dp),
@@ -44,8 +43,12 @@ fun MainGrid(viewModel: MyJournalState) {
                 items(sortedNotes) { note ->
                     NoteCard(
                         note = note,
-                        onClick = { viewModel.editNote(note) },  // Handle note viewing/editing
-                        onDelete = { viewModel.deleteNote(note) }
+                        onClickEdit = { viewModel.editNote(note) },
+                        onClickDetails = {
+                            isViewingDetails = true
+                            viewModel.viewNote(note)
+                        },
+                        onDelete = { viewModel.deleteNote(note) },
                     )
                 }
             }
@@ -61,13 +64,10 @@ fun MainGrid(viewModel: MyJournalState) {
                 modifier = Modifier
                     .align(Alignment.Center)
                     .offset(y = (-100).dp) // Move animation 100.dp upwards
-
             ) {
-                // Load the JSON content from the resources directory
                 val jsonData = loadJsonFromResources("welcome.json") // Path to your JSON file
 
                 if (jsonData.isNotEmpty()) {
-                    // Create Lottie composition from JSON data
                     val composition by rememberLottieComposition {
                         LottieCompositionSpec.JsonString(jsonData)
                     }
@@ -95,9 +95,10 @@ fun MainGrid(viewModel: MyJournalState) {
                 }
             }
         }
+
         // Floating Action Button for adding a new note
         AnimatedVisibility(
-            visible = !isViewingOrEditingNote,  // Only visible when no note is being added/edited
+            visible = !isEditingNote && !isViewingDetails,  // Only visible when no note is being added/edited
             enter = fadeIn(),
             exit = fadeOut(),
             modifier = Modifier
@@ -122,10 +123,8 @@ fun MainGrid(viewModel: MyJournalState) {
             }
         }
 
-
-
-        // Show the NoteDialog if a note is being edited or viewed
-        if (isViewingOrEditingNote) {
+        // Show the NoteDialog if a note is being edited
+        if (isEditingNote) {
             NoteDialog(
                 note = viewModel.currentNote!!,
                 onSave = {
@@ -142,9 +141,20 @@ fun MainGrid(viewModel: MyJournalState) {
                 },
                 onBodyChange = { newBody ->
                     viewModel.currentNote = viewModel.currentNote?.copy(body = newBody)
-                }
+                },
+                isEditing = isEditingNote // Pass the isEditingNote state here
+            )
+        }
+        // Show the NoteDetailsDialog if a note is being viewed
+        if (isViewingDetails && isEditingNote) {
+            NoteDetailsDialog(
+                note = viewModel.currentNote!!,
+                onDismiss = {
+                    isViewingDetails = false // Set to false when dismissed
+                    viewModel.clearCurrentNote()
+                },
+                //isVisible = isViewingDetails // Pass visibility state to NoteDetailsDialog
             )
         }
     }
 }
-

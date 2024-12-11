@@ -27,14 +27,14 @@ fun NoteDialog(
     onSave: () -> Unit,
     onDismiss: () -> Unit,
     onTitleChange: (String) -> Unit,
-    onBodyChange: (String) -> Unit
+    onBodyChange: (String) -> Unit,
+    isEditing: Boolean
 ) {
-    val isVisible by remember { mutableStateOf(true) }
-    val transition = updateTransition(targetState = isVisible, label = "Dialog Transition")
+    val transition = updateTransition(targetState = true, label = "Dialog Transition")
     val alpha by transition.animateFloat(
         transitionSpec = { tween(durationMillis = 500, easing = FastOutSlowInEasing) },
         label = "Alpha"
-    ) { if (it) 1f else 0f }
+    ) { if (true) 1f else 0f }
 
     Box(
         modifier = Modifier
@@ -116,33 +116,119 @@ fun NoteDialog(
                     }
                 }
 
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    TextButton(
-                        onClick = onDismiss,
-                        colors = ButtonDefaults.textButtonColors(contentColor = Color.Gray)
+                // Show save/cancel buttons only if in edit mode
+                if (isEditing) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.End
                     ) {
-                        Text("Annuler")
-                    }
+                        TextButton(
+                            onClick = onDismiss,
+                            colors = ButtonDefaults.textButtonColors(contentColor = Color.Gray)
+                        ) {
+                            Text("Annuler")
+                        }
 
-                    Spacer(modifier = Modifier.width(16.dp))
+                        Spacer(modifier = Modifier.width(16.dp))
 
-                    Button(
-                        onClick = onSave,
-                        colors = ButtonDefaults.buttonColors(containerColor = MainPurple)
-                    ) {
-                        Text("Sauvegarder")
+                        Button(
+                            onClick = onSave,
+                            colors = ButtonDefaults.buttonColors(containerColor = MainPurple)
+                        ) {
+                            Text("Sauvegarder")
+                        }
                     }
                 }
             }
         }
     }
 }
+
+
+@Composable
+fun NoteDetailsDialog(
+    note: Note,
+    onDismiss: () -> Unit
+) {
+    val transition = updateTransition(targetState = true, label = "Dialog Transition")
+    val alpha by transition.animateFloat(
+        transitionSpec = { tween(durationMillis = 500, easing = FastOutSlowInEasing) },
+        label = "Alpha"
+    ) { if (true) 1f else 0f }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .alpha(alpha)
+    ) {
+        Surface(
+            shape = RoundedCornerShape(10.dp),
+            color = DarkerGray,
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxHeight()
+            ) {
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .verticalScroll(rememberScrollState())
+                        .padding(16.dp)
+                ) {
+                    Column {
+                        Text(
+                            text = "Détails de la note",
+                            style = MaterialTheme.typography.headlineSmall,
+                            fontWeight = FontWeight.SemiBold,
+                            color = White
+                        )
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        Text(
+                            text = "${note.title}",
+                            style = MaterialTheme.typography.bodyMedium.copy(color = Color.White)
+                        )
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        Divider(color = Color.White.copy(alpha = 0.1f), thickness = 1.dp)
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        Text(
+                            text = "${note.body}",
+                            style = MaterialTheme.typography.bodyMedium.copy(color = Color.White)
+                        )
+                    }
+                }
+
+                // Only show the dismiss button in view mode
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Button(
+                        onClick = onDismiss,
+                        colors = ButtonDefaults.buttonColors(containerColor = MainPurple)
+                    ) {
+                        Text("Done")
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+
 
 
 
