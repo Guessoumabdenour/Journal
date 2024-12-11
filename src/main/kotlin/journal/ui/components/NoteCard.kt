@@ -5,11 +5,8 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -33,8 +30,12 @@ import compose.icons.fontawesomeicons.Regular
 import compose.icons.fontawesomeicons.Solid
 import compose.icons.fontawesomeicons.regular.Bookmark
 import compose.icons.fontawesomeicons.solid.Bookmark
+import io.github.alexzhirkevich.compottie.LottieCompositionSpec
+import io.github.alexzhirkevich.compottie.rememberLottieComposition
+import io.github.alexzhirkevich.compottie.rememberLottiePainter
 import journal.model.Note
 import journal.ui.theme.*
+import utils.loadJsonFromResources
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
@@ -127,12 +128,25 @@ fun NoteCard(
                     enter = fadeIn(animationSpec = tween(durationMillis = 300)),
                     exit = fadeOut(animationSpec = tween(durationMillis = 300)),
                 ) {
-                    Icon(
-                        imageVector = FontAwesomeIcons.Solid.Bookmark,
-                        contentDescription = "Favoris",
-                        tint = MyRed,
-                        modifier = Modifier.size(16.dp)
-                    )
+                    val jsonData = loadJsonFromResources("bookmark.json")
+                    if (jsonData.isNotEmpty()) {
+                        val composition by rememberLottieComposition {
+                            LottieCompositionSpec.JsonString(jsonData)
+                        }
+                        Image(
+                            painter = rememberLottiePainter(
+                                composition = composition,
+                            ),
+                            contentDescription = "Lottie animation",
+                            modifier = Modifier.size(24.dp)
+                        )
+                    } else {
+                        Box(
+                            modifier = Modifier
+                                .size(24.dp)
+                                .background(Color.Red)
+                        )
+                    }
                 }
 
                 Spacer(modifier = Modifier.width(10.dp))

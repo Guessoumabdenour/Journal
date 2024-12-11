@@ -162,19 +162,6 @@ fun App(viewModel: MyJournalState = MyJournalState()) {
                             }
                         }
 
-                        // Section Title
-                        Row(
-                            modifier = Modifier.fillMaxWidth().padding(8.dp)
-                        ) {
-                            Text(
-                                text = "Aujourd'hui", style = MaterialTheme.typography.headlineSmall.copy(
-                                    color = White, fontWeight = FontWeight.SemiBold
-                                ), modifier = Modifier.padding(
-                                    start = 12.dp,
-                                )
-                            )
-                        }
-
                         // Main Grid displaying all notes
                         MainGrid(viewModel = viewModel)
 

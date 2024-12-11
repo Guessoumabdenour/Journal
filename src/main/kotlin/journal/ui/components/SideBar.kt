@@ -201,16 +201,26 @@ fun NoteItem(note: Note) {
 fun calculateCounts(notes: List<Note>): Triple<Int, Int, Int> {
     val currentYear = Calendar.getInstance().get(Calendar.YEAR)
 
+    // Filter notes for the current year
     val entriesThisYear = notes.count {
         val noteDate = SimpleDateFormat("EEEE d MMMM", Locale.FRENCH).parse(it.dateCreated)
         val noteYear = Calendar.getInstance().apply { time = noteDate }.get(Calendar.YEAR)
         noteYear == currentYear
     }
 
+    // Calculate the total number of words across all notes, handling punctuation and special characters
     val wordsWritten = notes.sumOf { note ->
-        note.body.split("\\s+".toRegex()).size
+        // Clean up the body text: remove punctuation, special characters, and excess whitespace
+        val cleanedBody = note.body
+            .replace("[^\\p{L}\\s]".toRegex(), "")  // Remove non-letter characters
+            .replace("\\s+".toRegex(), " ")        // Replace multiple spaces with a single space
+            .trim()
+
+        // Split the cleaned body by whitespace and count the words
+        cleanedBody.split(" ").size
     }
 
+    // Calculate distinct writing days
     val distinctWritingDays = notes.map { note ->
         val noteDate = SimpleDateFormat("EEEE d MMMM", Locale.FRENCH).parse(note.dateCreated)
         SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(noteDate)
@@ -247,7 +257,6 @@ fun SettingsItem(
         Spacer(modifier = Modifier.width(16.dp))
     }
 }
-
 
 
 
