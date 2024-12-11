@@ -27,7 +27,7 @@ fun MainGrid(viewModel: MyJournalState) {
     val notes = viewModel.notes
     val sortedNotes = notes.sortedByDescending { it.id }
 
-    val isEditingNote by remember { derivedStateOf { viewModel.currentNote != null } }
+    val isEditingNote by remember { derivedStateOf { viewModel.currentNote != null && viewModel.isEditing } }
     var showAnimation by remember { mutableStateOf(true) }
     var isViewingDetails by remember { mutableStateOf(false) }
 
@@ -145,15 +145,15 @@ fun MainGrid(viewModel: MyJournalState) {
                 isEditing = isEditingNote // Pass the isEditingNote state here
             )
         }
-        // Show the NoteDetailsDialog if a note is being viewed
-        if (isViewingDetails && isEditingNote) {
+
+        // Show the NoteDetailsDialog if a note is being viewed (and not editing)
+        if (isViewingDetails && !isEditingNote) {
             NoteDetailsDialog(
                 note = viewModel.currentNote!!,
                 onDismiss = {
                     isViewingDetails = false // Set to false when dismissed
                     viewModel.clearCurrentNote()
-                },
-                //isVisible = isViewingDetails // Pass visibility state to NoteDetailsDialog
+                }
             )
         }
     }
