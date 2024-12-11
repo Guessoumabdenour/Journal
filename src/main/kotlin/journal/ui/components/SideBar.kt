@@ -47,7 +47,6 @@ fun SideBar(
     modifier: Modifier = Modifier.clip(RoundedCornerShape(20.dp)),
     notes: List<Note>,
     myJournalState: MyJournalState
-
 ) {
     val (wordsWritten, entriesThisYear, writingDays) = calculateCounts(myJournalState.notes)
 
@@ -70,7 +69,6 @@ fun SideBar(
                 style = MaterialTheme.typography.headlineSmall.copy(
                     color = WhiteColor,
                     fontWeight = FontWeight.SemiBold
-
                 ),
                 modifier = Modifier.padding(top = 0.dp, bottom = 12.dp)
             )
@@ -78,7 +76,7 @@ fun SideBar(
             // Dynamically pass the count values
             CustomBox(
                 icon = FontAwesomeIcons.Regular.CalendarCheck,
-                label = wordsWritten.toString(),
+                label = entriesThisYear.toString(),
                 sublabel = "entrée cette année",
                 iconColor = Color(0xFF5E5BE6),
             )
@@ -87,7 +85,7 @@ fun SideBar(
 
             CustomBox(
                 icon = FontAwesomeIcons.Solid.QuoteLeft,
-                label = entriesThisYear.toString(),
+                label = wordsWritten.toString(),
                 sublabel = "Mots écrits",
                 iconColor = Color(0xFFC36D73),
             )
@@ -109,12 +107,9 @@ fun SideBar(
             Text(
                 text = "Notes récentes",
                 style = MaterialTheme.typography.headlineSmall.copy(
-                    color = WhiteColor,                                     fontWeight = FontWeight.SemiBold
-
+                    color = WhiteColor, fontWeight = FontWeight.SemiBold
                 ),
-                modifier = Modifier.padding(
-                    top = 8.dp, bottom = 8.dp
-                )
+                modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)
             )
 
             // Box to wrap the LazyColumn and Spacer
@@ -122,19 +117,7 @@ fun SideBar(
                 // LazyColumn for the notes list
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
                     items(notes) { note ->
-                        var isVisible by remember { mutableStateOf(false) }
-
-                        LaunchedEffect(note.id) {
-                            isVisible = true
-                        }
-
-                        this@Column.AnimatedVisibility(
-                            visible = isVisible,
-                            enter = fadeIn(animationSpec = tween(durationMillis = 500)),
-                            exit = fadeOut(animationSpec = tween(durationMillis = 500))
-                        ) {
-                            NoteItem(note = note)
-                        }
+                        NoteItem(note = note)
                     }
                 }
             }
@@ -154,8 +137,7 @@ fun SideBar(
                 Text(
                     text = "Paramètres",
                     style = MaterialTheme.typography.headlineSmall.copy(
-                        color = WhiteColor,                                     fontWeight = FontWeight.SemiBold
-
+                        color = WhiteColor, fontWeight = FontWeight.SemiBold
                     ),
                     modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)
                 )
@@ -177,6 +159,43 @@ fun SideBar(
         }
     }
 }
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+fun NoteItem(note: Note) {
+    var isHovered by remember { mutableStateOf(false) }
+    val scrollState = rememberScrollState()
+
+    Box(
+        modifier = Modifier
+            .padding(vertical = 2.dp)
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(8.dp))
+            .background(
+                if (isHovered) ElevatedDarkerGray
+                else DarkerGray
+            )
+            .onPointerEvent(PointerEventType.Enter) {
+                isHovered = true
+            }
+            .onPointerEvent(PointerEventType.Exit) {
+                isHovered = false
+            }
+            .padding(8.dp)
+    ) {
+        Text(
+            text = note.title.ifBlank { "Pas de titre" },
+            style = MaterialTheme.typography.bodyMedium.copy(
+                color = Color.White
+            ),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier
+                .horizontalScroll(scrollState)
+        )
+    }
+}
+
 
 @Composable
 fun calculateCounts(notes: List<Note>): Triple<Int, Int, Int> {
@@ -229,50 +248,6 @@ fun SettingsItem(
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
-@Composable
-fun NoteItem(note: Note) {
-    var isHovered by remember { mutableStateOf(false) }
-    val scrollState = rememberScrollState()
-
-    Box(
-        modifier = Modifier
-            .padding(vertical = 2.dp)
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(8.dp))
-            .background(
-                if (isHovered) ElevatedDarkerGray
-                else DarkerGray
-            )
-            .onPointerEvent(PointerEventType.Enter) {
-                isHovered = true
-            }
-            .onPointerEvent(PointerEventType.Exit) {
-                isHovered = false
-            }
-            .padding(8.dp)
-    ) {
-        LaunchedEffect(isHovered) {
-            if (isHovered) {
-                scrollState.animateScrollTo(0)
-            } else {
-                scrollState.animateScrollTo(0)
-            }
-        }
-
-        Text(
-            text = note.title.ifBlank { "Pas de titre" },
-            style = MaterialTheme.typography.bodyMedium.copy(
-                color = Color.White
-            ),
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier
-                .horizontalScroll(scrollState)
-                .animateContentSize(tween(durationMillis = 300))
-        )
-    }
-}
 
 
 

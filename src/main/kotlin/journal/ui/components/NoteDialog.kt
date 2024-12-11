@@ -206,8 +206,6 @@ fun NoteDetailsDialog(
                         )
                     }
                 }
-
-                // Only show the dismiss button in view mode
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
