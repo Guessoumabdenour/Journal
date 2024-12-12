@@ -27,14 +27,13 @@ import compose.icons.feathericons.Info
 import compose.icons.feathericons.MoreHorizontal
 import compose.icons.feathericons.Trash2
 import compose.icons.fontawesomeicons.Regular
-import compose.icons.fontawesomeicons.Solid
 import compose.icons.fontawesomeicons.regular.Bookmark
-import compose.icons.fontawesomeicons.solid.Bookmark
 import io.github.alexzhirkevich.compottie.LottieCompositionSpec
 import io.github.alexzhirkevich.compottie.rememberLottieComposition
 import io.github.alexzhirkevich.compottie.rememberLottiePainter
 import journal.model.Note
 import journal.ui.theme.*
+import utils.DropdownItem
 import utils.loadJsonFromResources
 
 
@@ -198,7 +197,7 @@ fun NoteCard(
                                             iconTint = Color.White,
                                             onClick = {
                                                 expanded = false
-                                                onClickDetails() // Trigger the details view logic
+                                                onClickDetails()
                                             })
 
                                         Divider(

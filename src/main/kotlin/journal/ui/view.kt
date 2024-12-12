@@ -1,6 +1,6 @@
 package journal.ui
 
-import MainGrid
+import journal.ui.components.MainGrid
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -40,7 +40,7 @@ fun App(viewModel: MyJournalState = MyJournalState()) {
     val currentDate = remember { getCurrentDate() }
     val focusRequester = remember { FocusRequester() }
 
-    val jsonData = loadJsonFromResources("hello.json") // Path to your JSON file
+    val jsonData = loadJsonFromResources("hello.json")
     val composition by rememberLottieComposition {
         LottieCompositionSpec.JsonString(jsonData)
     }
@@ -121,9 +121,8 @@ fun App(viewModel: MyJournalState = MyJournalState()) {
                                             contentDescription = "Lottie animation",
                                             modifier = Modifier.size(200.dp),
                                             contentScale = ContentScale.FillWidth)
-                                        Spacer(modifier = Modifier.width(16.dp)) // Adjusted spacing
+                                        Spacer(modifier = Modifier.width(16.dp))
 
-                                        // **2. Add Search Bar**
                                         TextField(
                                             value = searchQuery,
                                             onValueChange = { searchQuery = it },
@@ -144,13 +143,13 @@ fun App(viewModel: MyJournalState = MyJournalState()) {
                                                 focusedIndicatorColor = Color.Transparent,
                                                 unfocusedIndicatorColor = Color.Transparent
                                             ),
-                                            modifier = Modifier.clip(RoundedCornerShape(20.dp)) // Rounded corners for aesthetics
+                                            modifier = Modifier.clip(RoundedCornerShape(20.dp))
                                                 .background(DarkerGray)
-                                                .weight(1f) // Allows the TextField to take up remaining horizontal space
+                                                .weight(1f)
                                                 .height(50.dp)
                                         )
 
-                                        Spacer(modifier = Modifier.width(16.dp)) // Adjusted spacing
+                                        Spacer(modifier = Modifier.width(16.dp))
 
                                         Text(
                                             text = currentDate, style = TextStyle(
@@ -161,11 +160,8 @@ fun App(viewModel: MyJournalState = MyJournalState()) {
                                 }
                             }
                         }
-
-                        // Main Grid displaying all notes
                         MainGrid(viewModel = viewModel)
 
-                        // Conditional Add Note Form
                         if (isAddingNote) {
                             AddNoteForm(
                                 title = newNoteTitle,
@@ -174,13 +170,11 @@ fun App(viewModel: MyJournalState = MyJournalState()) {
                                 onBodyChange = { newNoteBody = it },
                                 onSave = {
                                     viewModel.addNote(newNoteTitle, newNoteBody)
-                                    // Reset the form
                                     newNoteTitle = ""
                                     newNoteBody = ""
                                     isAddingNote = false
                                 },
                                 onCancel = {
-                                    // Reset the form
                                     newNoteTitle = ""
                                     newNoteBody = ""
                                     isAddingNote = false

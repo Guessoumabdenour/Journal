@@ -1,4 +1,4 @@
-package journal.ui.components
+package utils
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*

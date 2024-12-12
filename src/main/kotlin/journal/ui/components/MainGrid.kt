@@ -1,7 +1,8 @@
+package journal.ui.components
+
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -16,29 +17,22 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import compose.icons.FeatherIcons
-import compose.icons.feathericons.*
 import io.github.alexzhirkevich.compottie.*
 import journal.model.MyJournalState
 import journal.model.Note
-import journal.ui.components.*
-import journal.ui.theme.*
 import utils.loadJsonFromResources
 
-@Preview
 @Composable
 fun MainGrid(viewModel: MyJournalState) {
+
     val notes = viewModel.notes
     val sortedNotes = notes.sortedByDescending { it.id }
-
     val isEditingNote by remember { derivedStateOf { viewModel.currentNote != null && viewModel.isEditing } }
     var showAnimation by remember { mutableStateOf(true) }
     var isViewingDetails by remember { mutableStateOf(false) }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        // Conditionally show the list of notes based on `isViewingDetails` flag
         if (!isViewingDetails && !isEditingNote) {
-            // LazyVerticalGrid for showing notes
             LazyVerticalGrid(
                 columns = GridCells.Adaptive(minSize = 800.dp),
                 contentPadding = PaddingValues(8.dp),
@@ -58,11 +52,9 @@ fun MainGrid(viewModel: MyJournalState) {
             }
         }
 
-        // Overlay Layer for Animation and FAB
         Box(modifier = Modifier.fillMaxSize()) {
-            // Animated Visibility for the Lottie Animation
             AnimatedVisibility(
-                visible = showAnimation, // Show animation based on showAnimation state
+                visible = showAnimation,
                 enter = fadeIn(),
                 exit = fadeOut(),
                 modifier = Modifier
@@ -116,7 +108,6 @@ fun MainGrid(viewModel: MyJournalState) {
                         showAnimation = false
                         viewModel.editNote(Note(id = 0, title = "", body = ""))
                     },
-                //shape = MaterialTheme.shapes.extraSmall,
                 color = Color.Transparent
             ) {
                 val jsonData = loadJsonFromResources("add.json")
@@ -142,7 +133,6 @@ fun MainGrid(viewModel: MyJournalState) {
                             .size(80.dp),
                         contentScale = ContentScale.Crop
                     )
-                } else {
                 }
             }
         }
@@ -156,9 +146,9 @@ fun MainGrid(viewModel: MyJournalState) {
                     } else {
                         viewModel.updateNote(viewModel.currentNote!!)
                     }
-                    viewModel.clearCurrentNote()  // Clear the current note after saving
+                    viewModel.clearCurrentNote()
                 },
-                onDismiss = { viewModel.clearCurrentNote() },  // Dismiss and clear the current note
+                onDismiss = { viewModel.clearCurrentNote() },
                 onTitleChange = { newTitle ->
                     viewModel.currentNote = viewModel.currentNote?.copy(title = newTitle)
                 },
@@ -169,12 +159,11 @@ fun MainGrid(viewModel: MyJournalState) {
             )
         }
 
-        // Show the NoteDetailsDialog if a note is being viewed (and not editing)
         if (isViewingDetails && !isEditingNote) {
             NoteDetailsDialog(
                 note = viewModel.currentNote!!,
                 onDismiss = {
-                    isViewingDetails = false // Set to false when dismissed
+                    isViewingDetails = false
                     viewModel.clearCurrentNote()
                 }
             )

@@ -1,4 +1,4 @@
-package journal.ui.components
+package utils
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape

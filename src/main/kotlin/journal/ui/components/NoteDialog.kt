@@ -34,7 +34,7 @@ fun NoteDialog(
     val alpha by transition.animateFloat(
         transitionSpec = { tween(durationMillis = 500, easing = FastOutSlowInEasing) },
         label = "Alpha"
-    ) { if (true) 1f else 0f }
+    ) { 1f }
 
     Box(
         modifier = Modifier
@@ -156,7 +156,7 @@ fun NoteDetailsDialog(
     val alpha by transition.animateFloat(
         transitionSpec = { tween(durationMillis = 500, easing = FastOutSlowInEasing) },
         label = "Alpha"
-    ) { if (true) 1f else 0f }
+    ) { 1f }
 
     Box(
         modifier = Modifier
@@ -190,7 +190,7 @@ fun NoteDetailsDialog(
                         Spacer(modifier = Modifier.height(16.dp))
 
                         Text(
-                            text = "${note.title}",
+                            text = note.title,
                             style = MaterialTheme.typography.bodyMedium.copy(color = Color.White)
                         )
 
@@ -201,7 +201,7 @@ fun NoteDetailsDialog(
                         Spacer(modifier = Modifier.height(16.dp))
 
                         Text(
-                            text = "${note.body}",
+                            text = note.body,
                             style = MaterialTheme.typography.bodyMedium.copy(color = Color.White)
                         )
                     }

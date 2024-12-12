@@ -1,6 +1,5 @@
 package journal.ui.components
 
-import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,7 +18,6 @@ import compose.icons.fontawesomeicons.Regular
 import compose.icons.fontawesomeicons.Solid
 import compose.icons.fontawesomeicons.regular.CalendarAlt
 import compose.icons.fontawesomeicons.solid.QuoteLeft
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -33,13 +31,8 @@ import compose.icons.fontawesomeicons.regular.CalendarCheck
 import journal.model.MyJournalState
 import journal.model.Note
 import journal.ui.theme.*
-
-import java.text.SimpleDateFormat
-import java.util.*
-
-
-
-
+import utils.CustomBox
+import utils.calculateCounts
 
 
 @Composable
@@ -73,7 +66,6 @@ fun SideBar(
                 modifier = Modifier.padding(top = 0.dp, bottom = 12.dp)
             )
 
-            // Dynamically pass the count values
             CustomBox(
                 icon = FontAwesomeIcons.Regular.CalendarCheck,
                 label = entriesThisYear.toString(),
@@ -103,7 +95,6 @@ fun SideBar(
 
             Divider(color = Color.White.copy(alpha = 0.1f), thickness = 1.dp)
 
-            // Add the Notes List dynamically from the notes parameter
             Text(
                 text = "Notes récentes",
                 style = MaterialTheme.typography.headlineSmall.copy(
@@ -112,9 +103,7 @@ fun SideBar(
                 modifier = Modifier.padding(top = 8.dp, bottom = 8.dp)
             )
 
-            // Box to wrap the LazyColumn and Spacer
             Box(modifier = Modifier.weight(1f)) {
-                // LazyColumn for the notes list
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
                     items(notes) { note ->
                         NoteItem(note = note)
@@ -122,10 +111,8 @@ fun SideBar(
                 }
             }
 
-            // Spacer to push the settings to the bottom
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Settings section stays fixed at the bottom
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -197,37 +184,6 @@ fun NoteItem(note: Note) {
 }
 
 
-@Composable
-fun calculateCounts(notes: List<Note>): Triple<Int, Int, Int> {
-    val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-
-    // Filter notes for the current year
-    val entriesThisYear = notes.count {
-        val noteDate = SimpleDateFormat("EEEE d MMMM", Locale.FRENCH).parse(it.dateCreated)
-        val noteYear = Calendar.getInstance().apply { time = noteDate }.get(Calendar.YEAR)
-        noteYear == currentYear
-    }
-
-    // Calculate the total number of words across all notes, handling punctuation and special characters
-    val wordsWritten = notes.sumOf { note ->
-        // Clean up the body text: remove punctuation, special characters, and excess whitespace
-        val cleanedBody = note.body
-            .replace("[^\\p{L}\\s]".toRegex(), "")  // Remove non-letter characters
-            .replace("\\s+".toRegex(), " ")        // Replace multiple spaces with a single space
-            .trim()
-
-        // Split the cleaned body by whitespace and count the words
-        cleanedBody.split(" ").size
-    }
-
-    // Calculate distinct writing days
-    val distinctWritingDays = notes.map { note ->
-        val noteDate = SimpleDateFormat("EEEE d MMMM", Locale.FRENCH).parse(note.dateCreated)
-        SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(noteDate)
-    }.toSet().size
-
-    return Triple(entriesThisYear, wordsWritten, distinctWritingDays)
-}
 
 @Composable
 fun SettingsItem(
