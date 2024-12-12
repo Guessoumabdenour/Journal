@@ -110,9 +110,8 @@ fun MainGrid(viewModel: MyJournalState) {
             Surface(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
-                    .clip(RoundedCornerShape(1000.dp))
-                    .padding(0.dp)
-                    .size(100.dp)
+                    .clip(RoundedCornerShape(100.dp))
+                    .wrapContentSize()
                     .clickable {
                         showAnimation = false
                         viewModel.editNote(Note(id = 0, title = "", body = ""))
@@ -140,16 +139,14 @@ fun MainGrid(viewModel: MyJournalState) {
                         contentDescription = "Lottie animation",
                         modifier = Modifier
                             .clip(RoundedCornerShape(20.dp))
-                            .fillMaxHeight(),
+                            .size(80.dp),
                         contentScale = ContentScale.Crop
                     )
                 } else {
-                    // Handle error or display placeholder
                 }
             }
         }
 
-        // Show the NoteDialog if a note is being edited
         if (isEditingNote) {
             NoteDialog(
                 note = viewModel.currentNote!!,
@@ -168,7 +165,7 @@ fun MainGrid(viewModel: MyJournalState) {
                 onBodyChange = { newBody ->
                     viewModel.currentNote = viewModel.currentNote?.copy(body = newBody)
                 },
-                isEditing = isEditingNote // Pass the isEditingNote state here
+                isEditing = isEditingNote
             )
         }
 
