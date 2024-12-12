@@ -1,6 +1,7 @@
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -11,7 +12,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.*
@@ -22,6 +25,7 @@ import journal.ui.components.*
 import journal.ui.theme.*
 import utils.loadJsonFromResources
 
+@Preview
 @Composable
 fun MainGrid(viewModel: MyJournalState) {
     val notes = viewModel.notes
@@ -63,9 +67,9 @@ fun MainGrid(viewModel: MyJournalState) {
                 exit = fadeOut(),
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .offset(y = (-100).dp) // Move animation 100.dp upwards
+                    .offset(y = (-100).dp)
             ) {
-                val jsonData = loadJsonFromResources("welcome.json") // Path to your JSON file
+                val jsonData = loadJsonFromResources("welcome.json")
 
                 if (jsonData.isNotEmpty()) {
                     val composition by rememberLottieComposition {
@@ -86,7 +90,6 @@ fun MainGrid(viewModel: MyJournalState) {
                         modifier = Modifier.size(600.dp)
                     )
                 } else {
-                    // Fallback in case JSON fails to load
                     Box(
                         modifier = Modifier
                             .size(150.dp)
@@ -96,30 +99,53 @@ fun MainGrid(viewModel: MyJournalState) {
             }
         }
 
-        // Floating Action Button for adding a new note
         AnimatedVisibility(
-            visible = !isEditingNote && !isViewingDetails,  // Only visible when no note is being added/edited
+            visible = !isEditingNote && !isViewingDetails,
             enter = fadeIn(),
             exit = fadeOut(),
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(16.dp)
+                .padding(24.dp)
         ) {
-            FloatingActionButton(
-                shape = RoundedCornerShape(100.dp),
-                containerColor = MainPurple,
-                onClick = {
-                    showAnimation = false  // Hide the animation
-                    viewModel.editNote(Note(id = 0, title = "", body = ""))  // Start editing a new note
-                },
-                contentColor = White
+            Surface(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .clip(RoundedCornerShape(1000.dp))
+                    .padding(0.dp)
+                    .size(100.dp)
+                    .clickable {
+                        showAnimation = false
+                        viewModel.editNote(Note(id = 0, title = "", body = ""))
+                    },
+                //shape = MaterialTheme.shapes.extraSmall,
+                color = Color.Transparent
             ) {
-                Icon(
-                    tint = White,
-                    imageVector = FeatherIcons.Plus,
-                    contentDescription = "Add Note",
-                    modifier = Modifier.size(24.dp)
-                )
+                val jsonData = loadJsonFromResources("add.json")
+
+                if (jsonData.isNotEmpty()) {
+                    val composition by rememberLottieComposition {
+                        LottieCompositionSpec.JsonString(jsonData)
+                    }
+
+                    val progress by animateLottieCompositionAsState(
+                        composition,
+                        iterations = Compottie.IterateForever
+                    )
+
+                    Image(
+                        painter = rememberLottiePainter(
+                            composition = composition,
+                            progress = { progress }
+                        ),
+                        contentDescription = "Lottie animation",
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(20.dp))
+                            .fillMaxHeight(),
+                        contentScale = ContentScale.Crop
+                    )
+                } else {
+                    // Handle error or display placeholder
+                }
             }
         }
 

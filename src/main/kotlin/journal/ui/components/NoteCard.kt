@@ -138,7 +138,7 @@ fun NoteCard(
                                 composition = composition,
                             ),
                             contentDescription = "Lottie animation",
-                            modifier = Modifier.size(24.dp)
+                            modifier = Modifier.size(32.dp)
                         )
                     } else {
                         Box(
@@ -154,13 +154,13 @@ fun NoteCard(
                 Box {
                     IconButton(
                         onClick = { expanded = !expanded },
-                        modifier = Modifier.size(16.dp)
+                        modifier = Modifier.size(24.dp)
                     ) {
                         Icon(
                             imageVector = FeatherIcons.MoreHorizontal,
                             contentDescription = "Options supplémentaires",
                             tint = IconColorDefault,
-                            modifier = Modifier.size(16.dp)
+                            modifier = Modifier.size(24.dp)
                         )
                     }
 
