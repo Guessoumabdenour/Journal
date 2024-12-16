@@ -23,6 +23,8 @@ dependencies {
     implementation("org.jetbrains.compose.material3:material3-desktop:1.2.1")
     implementation("io.github.alexzhirkevich:compottie:2.0.0-rc01")
 
+    implementation(compose.foundation)
+
 
 }
 

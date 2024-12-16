@@ -5,15 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="952f4fba-d034-4ad5-a4b0-d72ae451732e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/utils/CalculateCounts.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/journal/ui/components/CustomBox.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/utils/CustomBox.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/journal/ui/components/DropdownItem.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/utils/DropdownItem.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/journal/ui/components/MainGrid.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/journal/ui/components/MainGrid.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/journal/ui/components/NoteCard.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/journal/ui/components/NoteCard.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/journal/ui/components/NoteDialog.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/journal/ui/components/NoteDialog.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/journal/model/model.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/journal/model/model.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/journal/ui/components/SideBar.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/journal/ui/components/SideBar.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/journal/ui/view.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/journal/ui/view.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/utils/CalculateCounts.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/utils/CalculateCounts.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,8 +24,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Kotlin Class" />
         <option value="Kotlin File" />
+        <option value="Kotlin Class" />
       </list>
     </option>
   </component>
@@ -49,6 +45,7 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Gradle.Build Journal.executor&quot;: &quot;Run&quot;,
     &quot;Gradle.Build journal.executor&quot;: &quot;Run&quot;,
     &quot;Kotlin.MainKt.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
@@ -56,7 +53,13 @@
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/guess/Downloads/verlan/journal/src/main/resources&quot;
+    &quot;last_opened_file_path&quot;: &quot;D:/OneDrive - GINKGO SARL/Clem/Cours/master/M1/s7/ihm/Journal&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
   <component name="RecentsManager">
@@ -92,8 +95,13 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1733528775131</updated>
+      <workItem from="1734028111471" duration="82000" />
+      <workItem from="1734028216381" duration="11606000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">

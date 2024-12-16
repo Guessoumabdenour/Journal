@@ -56,7 +56,13 @@ class MyJournalState {
     companion object {
         fun getCurrentDate(): String {
             val calendar = Calendar.getInstance()
-            val dateFormat = SimpleDateFormat("EEEE d MMMM", Locale.FRENCH)
+            val dateFormat = SimpleDateFormat("EEEE d MMMM yyyy", Locale.FRENCH)
+
+            // Extensive logging
+            println("Current Date Generation:")
+            println("Calendar Time: ${calendar.time}")
+            println("Formatted Date: $dateFormat")
+
             return dateFormat.format(calendar.time)
         }
     }

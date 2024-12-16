@@ -41,7 +41,7 @@ fun SideBar(
     notes: List<Note>,
     myJournalState: MyJournalState
 ) {
-    val (wordsWritten, entriesThisYear, writingDays) = calculateCounts(myJournalState.notes)
+    val (entriesThisYear,  wordsWritten, writingDays) = calculateCounts(myJournalState.notes)
 
     Box(
         modifier = modifier
@@ -213,6 +213,3 @@ fun SettingsItem(
         Spacer(modifier = Modifier.width(16.dp))
     }
 }
-
-
-
