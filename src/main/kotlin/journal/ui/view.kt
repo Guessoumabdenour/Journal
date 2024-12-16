@@ -122,7 +122,7 @@ fun App(viewModel: MyJournalState = MyJournalState()) {
                                             modifier = Modifier.size(200.dp),
                                             contentScale = ContentScale.FillWidth)
                                         Spacer(modifier = Modifier.width(16.dp))
-
+                                        /**
                                         TextField(
                                             value = searchQuery,
                                             onValueChange = { searchQuery = it },
@@ -148,8 +148,8 @@ fun App(viewModel: MyJournalState = MyJournalState()) {
                                                 .weight(1f)
                                                 .height(50.dp)
                                         )
-
-                                        Spacer(modifier = Modifier.width(16.dp))
+**/
+                                        Spacer(modifier = Modifier.weight(1f))
 
                                         Text(
                                             text = currentDate, style = TextStyle(
